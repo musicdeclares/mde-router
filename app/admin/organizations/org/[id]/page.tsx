@@ -44,7 +44,7 @@ import { getCountryLabel, getCountryFlag } from "@/app/lib/countries";
 import { isSamePrimaryDomain } from "@/app/lib/url-utils";
 import { getTourStatus, formatDateRange } from "@/app/lib/tour-utils";
 
-const MAX_MISSION_LENGTH = 80;
+const MAX_MISSION_LENGTH = 85;
 const MAX_CTA_TEXT_LENGTH = 35;
 
 interface LinkedTour {
@@ -623,9 +623,9 @@ export default function OrgProfilePage({
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Reset all profile overrides. The organization will revert to its
-                  MDEDB data for fan-facing display, and routing will use the
-                  org&apos;s website URL.
+                  Reset all profile overrides. The organization will revert to
+                  its MDEDB data for fan-facing display, and routing will use
+                  the org&apos;s website URL.
                 </p>
                 <Button
                   variant="destructive"
