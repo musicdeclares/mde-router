@@ -161,7 +161,7 @@ NEXT_PUBLIC_SITE_URL          # For canonical URLs in kit page
 
 ## Deployment
 
-Hosted on Vercel. Only `main` and `staging` branches trigger deployments (configured via Ignored Build Step).
+Hosted on Vercel. Only `main` and `staging` branches trigger deployments (configured via Ignored Build Step in Settings → Build and Deployment).
 
 ### Environments
 
