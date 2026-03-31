@@ -2,15 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
-import {
-  Copy,
-  Check,
-  QrCode,
-  Plus,
-  ExternalLink,
-  Pause,
-  Ban,
-} from "lucide-react";
+import { Plus, Pause, Ban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { QrCodeDialog } from "@/components/shared/QrCodeDialog";
+import { AmplifyLinkActions } from "@/components/shared/AmplifyLinkActions";
 import { Artist, Tour } from "@/app/types/router";
 import { EVENTS, SOURCES } from "@/app/lib/analytics-events";
 
@@ -36,13 +28,6 @@ interface AnalyticsData {
   topCountries: { country_code: string; count: number }[];
 }
 
-function getSiteUrl(): string {
-  if (typeof window !== "undefined") {
-    return window.location.origin;
-  }
-  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-}
-
 export default function ArtistDashboardPage({
   params,
 }: {
@@ -52,8 +37,6 @@ export default function ArtistDashboardPage({
   const [artist, setArtist] = useState<ArtistWithTours | null>(null);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [copied, setCopied] = useState(false);
-  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -84,15 +67,6 @@ export default function ArtistDashboardPage({
     fetchData();
   }, [artistId]);
 
-  function copyLink() {
-    if (!artist) return;
-    const url = `${getSiteUrl()}/a/${artist.handle}`;
-    navigator.clipboard.writeText(url);
-    setCopied(true);
-    toast.success("Link copied to clipboard");
-    setTimeout(() => setCopied(false), 2000);
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -109,7 +83,6 @@ export default function ArtistDashboardPage({
     );
   }
 
-  const amplifyUrl = `${getSiteUrl()}/a/${artist.handle}`;
   const activeTour = artist.router_tours?.find((tour) => {
     const now = new Date();
     const startDate = new Date(tour.start_date);
@@ -172,49 +145,16 @@ export default function ArtistDashboardPage({
               Share this link anywhere to direct fans to climate action
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-2">
-              <code className="flex-1 bg-muted px-3 py-2 rounded text-sm break-all">
-                {amplifyUrl}
-              </code>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={copyLink}
-                data-umami-event={EVENTS.ARTIST_COPY_LINK}
-                data-umami-event-artist={artist.handle}
-              >
-                {copied ? (
-                  <Check className="h-4 w-4" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setQrDialogOpen(true)}
-                data-umami-event={EVENTS.ARTIST_OPEN_QR_DIALOG}
-                data-umami-event-artist={artist.handle}
-              >
-                <QrCode className="h-4 w-4 mr-2" />
-                Generate QR Code
-              </Button>
-              <Button variant="outline" className="w-full flex-1" asChild>
-                <Link
-                  href={`/kit/${artist.handle}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-umami-event={EVENTS.ARTIST_VIEW_KIT}
-                  data-umami-event-artist={artist.handle}
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  View Starter Kit
-                </Link>
-              </Button>
-            </div>
+          <CardContent>
+            <AmplifyLinkActions
+              artistHandle={artist.handle}
+              artistName={artist.name}
+              events={{
+                copyLink: EVENTS.ARTIST_COPY_LINK,
+                openQrDialog: EVENTS.ARTIST_OPEN_QR_DIALOG,
+                viewKit: EVENTS.ARTIST_VIEW_KIT,
+              }}
+            />
           </CardContent>
         </Card>
 
@@ -352,12 +292,6 @@ export default function ArtistDashboardPage({
         )}
       </div>
 
-      <QrCodeDialog
-        artistHandle={artist.handle}
-        artistName={artist.name}
-        open={qrDialogOpen}
-        onOpenChange={setQrDialogOpen}
-      />
     </div>
   );
 }

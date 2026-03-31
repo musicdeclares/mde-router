@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, use, useMemo } from "react";
-import { QrCode } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Artist, Tour } from "@/app/types/router";
 import { TourTable, TourWithArtist } from "@/components/tours/TourTable";
-import { QrCodeDialog } from "@/components/shared/QrCodeDialog";
+import { AmplifyLinkActions } from "@/components/shared/AmplifyLinkActions";
 import { useUnsavedChanges } from "@/app/lib/hooks/use-unsaved-changes";
 import { UnsavedChangesIndicator } from "@/components/shared/UnsavedChangesIndicator";
 import { EVENTS } from "@/app/lib/analytics-events";
@@ -39,7 +38,6 @@ export default function EditArtistPage({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
   // Form state
   const [name, setName] = useState("");
@@ -198,25 +196,12 @@ export default function EditArtistPage({
 
               <div className="space-y-2">
                 <Label>Handle</Label>
-                <div className="flex items-center gap-2">
-                  <code className="flex-1 bg-muted px-3 py-2 rounded text-sm">
-                    {artist.handle}
-                  </code>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        `${window.location.origin}/a/${artist.handle}`,
-                      );
-                      toast.success("Link copied");
-                    }}
-                  >
-                    Copy Full Link
-                  </Button>
-                </div>
+                <code className="block bg-muted px-3 py-2 rounded text-sm">
+                  {artist.handle}
+                </code>
                 <p className="text-sm text-muted-foreground">
-                  Handle cannot be changed after creation.
+                  The handle portion of this link cannot be changed after
+                  creation.
                 </p>
               </div>
 
@@ -320,41 +305,33 @@ export default function EditArtistPage({
             </CardContent>
           </Card>
 
-          <p className="text-xs text-muted-foreground">
-            Added {new Date(artist.created_at).toLocaleDateString()} · Last
-            updated {new Date(artist.updated_at).toLocaleDateString()}
-          </p>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">QR Code</CardTitle>
+              <CardTitle className="text-base">Artist AMPLIFY Assets</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Generate a QR code for this artist&apos;s AMPLIFY link.
-              </p>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setQrDialogOpen(true)}
-              >
-                <QrCode className="h-4 w-4 mr-2" />
-                Generate QR Code
-              </Button>
+              <AmplifyLinkActions
+                artistHandle={artist.handle}
+                artistName={artist.name}
+                events={{
+                  copyLink: EVENTS.ADMIN_COPY_LINK,
+                  openQrDialog: EVENTS.ADMIN_OPEN_QR_DIALOG,
+                  viewKit: EVENTS.ADMIN_VIEW_KIT,
+                }}
+              />
             </CardContent>
           </Card>
         </div>
       </div>
 
-      <QrCodeDialog
-        artistHandle={artist.handle}
-        artistName={artist.name}
-        open={qrDialogOpen}
-        onOpenChange={setQrDialogOpen}
-      />
+      <p className="text-xs text-muted-foreground">
+        Added {new Date(artist.created_at).toLocaleDateString()} · Last
+        updated {new Date(artist.updated_at).toLocaleDateString()}
+      </p>
     </div>
   );
 }

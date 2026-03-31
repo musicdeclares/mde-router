@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/app/lib/supabase";
-import { getApiUser, isAdmin, isStaff } from "@/app/lib/api-auth";
+import { getApiUser, isStaff } from "@/app/lib/api-auth";
 
 export async function GET(request: NextRequest) {
   try {

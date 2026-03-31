@@ -68,6 +68,9 @@ export const EVENTS = {
   ADMIN_SAVE_ORG_PROFILE: "admin-save-org-profile",
   ADMIN_RESET_ORG_PROFILE: "admin-reset-org-profile",
   ADMIN_UPLOAD_ORG_IMAGE: "admin-upload-org-image",
+  ADMIN_COPY_LINK: "admin-copy-link",
+  ADMIN_OPEN_QR_DIALOG: "admin-open-qr-dialog",
+  ADMIN_VIEW_KIT: "admin-view-kit",
   ADMIN_REMOVE_ORG_IMAGE: "admin-remove-org-image",
 
   // === Invite Acceptance ===

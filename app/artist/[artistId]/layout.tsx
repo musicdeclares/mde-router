@@ -204,7 +204,7 @@ export default function ArtistLayout({
           </div>
         )}
       </nav>
-      <main className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl py-6 pb-24 px-4 sm:px-6 lg:px-8">
         {children}
       </main>
       <FeedbackWidget artistId={artistId} />
