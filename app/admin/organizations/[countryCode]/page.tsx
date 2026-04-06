@@ -50,7 +50,7 @@ import { EVENTS } from "@/app/lib/analytics-events";
 interface Organization extends OrgPublicView {
   router_enabled: boolean;
   router_pause_reason: string | null;
-  has_profile: boolean;
+  has_tagline: boolean;
   cta_url: string | null;
 }
 
@@ -450,9 +450,9 @@ export default function CountryDetailPage({
                             Date-specific
                           </Badge>
                         )}
-                        {org.has_profile && (
+                        {!org.has_tagline && (
                           <Badge className="text-xs" variant="outline">
-                            Profile customized
+                            Tagline required
                           </Badge>
                         )}
                         {!org.router_enabled && (

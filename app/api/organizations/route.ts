@@ -40,9 +40,9 @@ export async function GET(request: NextRequest) {
 
     const { data: profiles } = await supabaseAdmin
       .from('router_org_profiles')
-      .select('org_id, cta_url')
+      .select('org_id, cta_url, tagline')
       .in('org_id', orgIds) as {
-        data: Array<{ org_id: string; cta_url: string | null }> | null
+        data: Array<{ org_id: string; cta_url: string | null; tagline: string | null }> | null
         error: unknown
       }
 
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         ...org,
         router_enabled: override?.enabled ?? true, // Default to enabled if no override
         router_pause_reason: override?.reason ?? null,
-        has_profile: !!profile,
+        has_tagline: !!profile?.tagline,
         cta_url: profile?.cta_url ?? null
       }
     })

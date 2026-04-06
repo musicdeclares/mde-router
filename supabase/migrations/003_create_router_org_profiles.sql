@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.router_org_profiles (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     org_id UUID NOT NULL REFERENCES public.org(id) ON DELETE RESTRICT,
     org_name TEXT,                  -- Fan-facing name; falls back to org.org_name
-    mission TEXT,                   -- Fan-facing mission; falls back to org.mission_statement
+    tagline TEXT,                   -- Short teaser; required for org to appear in directory
     cta_url TEXT,                   -- Router redirect destination; falls back to org.website
     cta_text TEXT,                  -- Button label; UI defaults to "Get involved" when NULL
     fan_actions TEXT[],             -- e.g., '{"Volunteer", "Pressure decision-makers"}'

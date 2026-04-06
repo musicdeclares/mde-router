@@ -7,7 +7,6 @@ interface OrgPublicView {
   org_name: string;
   country_code: string;
   website: string | null;
-  mission_statement: string | null;
   logo: string | null;
   banner: string | null;
 }
@@ -15,10 +14,11 @@ interface OrgPublicView {
 interface OrgProfile {
   org_id: string;
   org_name: string | null;
-  mission: string | null;
+  tagline: string | null;
   cta_url: string | null;
   cta_text: string | null;
   fan_actions: string[] | null;
+  description: string | null;
   image_url: string | null;
 }
 
@@ -32,12 +32,12 @@ export async function getOrganizations(): Promise<DirectoryOrganization[]> {
     supabaseAdmin
       .from("org_public_view")
       .select(
-        "id, org_name, country_code, website, mission_statement, logo, banner"
+        "id, org_name, country_code, website, logo, banner"
       ),
     supabaseAdmin
       .from("router_org_profiles")
       .select(
-        "org_id, org_name, mission, cta_url, cta_text, fan_actions, image_url"
+        "org_id, org_name, tagline, cta_url, cta_text, fan_actions, description, image_url"
       ),
   ]);
 
@@ -56,20 +56,25 @@ export async function getOrganizations(): Promise<DirectoryOrganization[]> {
   const organizations: DirectoryOrganization[] = (
     orgsResult.data as OrgPublicView[]
   )
-    .map((org) => {
+    .filter((org) => {
       const profile = profileMap.get(org.id);
+      return !!profile?.tagline;
+    })
+    .map((org) => {
+      const profile = profileMap.get(org.id)!;
 
       return {
         id: org.id,
-        name: profile?.org_name || org.org_name,
+        name: profile.org_name || org.org_name,
         country: getCountryLabel(org.country_code),
         countryCode: org.country_code,
-        mission: profile?.mission || org.mission_statement || "",
-        fanActions: profile?.fan_actions || [],
+        tagline: profile.tagline!,
+        fanActions: profile.fan_actions || [],
         website: org.website || "",
-        ctaUrl: profile?.cta_url || org.website || "",
-        ctaText: profile?.cta_text || "", // Default applied in component for i18n
-        imageUrl: profile?.image_url || org.banner || org.logo || "",
+        ctaUrl: profile.cta_url || org.website || "",
+        ctaText: profile.cta_text || "", // Default applied in component for i18n
+        imageUrl: profile.image_url || org.banner || org.logo || "",
+        description: profile.description || "",
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
