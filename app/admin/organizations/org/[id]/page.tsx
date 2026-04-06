@@ -50,7 +50,7 @@ import { isSamePrimaryDomain } from "@/app/lib/url-utils";
 import { getTourStatus, formatDateRange } from "@/app/lib/tour-utils";
 
 const MAX_TAGLINE_LENGTH = 85;
-const MAX_ORG_DESCRIPTION_LENGTH = 500;
+const MAX_DESCRIPTION_LENGTH = 850;
 const MAX_CTA_TEXT_LENGTH = 35;
 
 interface LinkedTour {
@@ -481,7 +481,7 @@ export default function OrgProfilePage({
                   value={description}
                   onChange={(e) =>
                     setOrgDescription(
-                      e.target.value.slice(0, MAX_ORG_DESCRIPTION_LENGTH),
+                      e.target.value.slice(0, MAX_DESCRIPTION_LENGTH),
                     )
                   }
                   placeholder="How this organization wants to be described to artists"
@@ -495,7 +495,7 @@ export default function OrgProfilePage({
                     about the org in their own words.
                   </p>
                   <span className="text-xs text-muted-foreground shrink-0">
-                    {description.length}/{MAX_ORG_DESCRIPTION_LENGTH}
+                    {description.length}/{MAX_DESCRIPTION_LENGTH}
                   </span>
                 </div>
               </div>
