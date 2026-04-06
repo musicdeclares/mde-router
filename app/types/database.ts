@@ -285,10 +285,11 @@ export interface Database {
           id: string;
           org_id: string;
           org_name: string | null;
-          mission: string | null;
+          tagline: string | null;
           cta_url: string | null;
           cta_text: string | null;
           fan_actions: string[] | null;
+          description: string | null;
           image_url: string | null;
           created_at: string;
           updated_at: string;
@@ -297,10 +298,11 @@ export interface Database {
           id?: string;
           org_id: string;
           org_name?: string | null;
-          mission?: string | null;
+          tagline?: string | null;
           cta_url?: string | null;
           cta_text?: string | null;
           fan_actions?: string[] | null;
+          description?: string | null;
           image_url?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -309,10 +311,11 @@ export interface Database {
           id?: string;
           org_id?: string;
           org_name?: string | null;
-          mission?: string | null;
+          tagline?: string | null;
           cta_url?: string | null;
           cta_text?: string | null;
           fan_actions?: string[] | null;
+          description?: string | null;
           image_url?: string | null;
           created_at?: string;
           updated_at?: string;

@@ -75,6 +75,9 @@ export const directoryContent = {
     card: {
       fansCanLabel: "FANS CAN",
       defaultCtaText: "Get involved",
+      descriptionTooltip: "In the org's words",
+      copyDescription: "Copy",
+      descriptionCopied: "Copied",
     },
     empty: {
       noResults: {
@@ -142,6 +145,9 @@ export const directoryContent = {
     card: {
       fansCanLabel: "LES FANS PEUVENT",
       defaultCtaText: "S'impliquer",
+      descriptionTooltip: "Dans les mots de l'organisation",
+      copyDescription: "Copier",
+      descriptionCopied: "Copié",
     },
     empty: {
       noResults: {

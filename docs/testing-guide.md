@@ -4,18 +4,51 @@
 
 1. **Local Supabase running:**
    ```bash
-   supabase start
+   npx supabase start
    ```
 
 2. **Database seeded with test data:**
    ```bash
-   supabase db reset
+   npx supabase db reset
    ```
 
-3. **Next.js dev server running:**
+3. **Apply any pending migrations:**
+   ```bash
+   npx supabase migration up
+   ```
+   This runs migration files in `supabase/migrations/` that haven't been applied yet. Run this whenever you pull new migration files.
+
+4. **Next.js dev server running:**
    ```bash
    npm run dev
    ```
+
+## Deploying with Migrations
+
+When a release includes a new migration file in `supabase/migrations/`, apply it to each environment **before** deploying the code. Migrations typically add nullable columns or new tables, so running them first is safe — but deploying code first may cause API errors if it references columns that don't exist yet.
+
+### Staging
+
+1. Push code to staging branch for a Vercel preview build:
+   ```bash
+   git push origin HEAD:staging -f
+   ```
+2. Apply the migration in **Supabase Studio → SQL Editor** for the staging project, or via CLI:
+   ```bash
+   npx supabase db push --db-url "postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres"
+   ```
+3. Test at the staging URL.
+
+### Production
+
+4. Apply the migration to the production Supabase project (same steps as above, using the production DB URL).
+5. Merge your feature branch to `main` — Vercel deploys automatically.
+
+### Finding your DB URL
+
+In the Supabase dashboard: **Settings → Database → Connection string → URI**. Use the direct connection (not the pooler) for migrations.
+
+---
 
 ## Manual Testing with curl
 

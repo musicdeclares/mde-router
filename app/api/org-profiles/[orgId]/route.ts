@@ -33,7 +33,7 @@ export async function GET(
         id: string;
         org_id: string;
         org_name: string | null;
-        mission: string | null;
+        tagline: string | null;
         cta_url: string | null;
         cta_text: string | null;
         fan_actions: string[] | null;
@@ -232,7 +232,7 @@ export async function PUT(
   try {
     const { orgId } = await params;
     const body = await request.json();
-    const { org_name, mission, cta_text, fan_actions } = body;
+    const { org_name, tagline, cta_text, fan_actions, description } = body;
     let { cta_url } = body;
 
     const warnings: string[] = [];
@@ -290,10 +290,11 @@ export async function PUT(
         {
           org_id: orgId,
           org_name: org_name || null,
-          mission: mission || null,
+          tagline: tagline || null,
           cta_url: cta_url || null,
           cta_text: cta_text || null,
           fan_actions: fan_actions || null,
+          description: description || null,
         },
         { onConflict: "org_id" },
       )

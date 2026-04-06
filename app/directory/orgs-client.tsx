@@ -66,7 +66,7 @@ export function OrgsClient({
       const term = searchTerm.toLowerCase();
       const matchesSearch =
         org.name.toLowerCase().includes(term) ||
-        org.mission.toLowerCase().includes(term) ||
+        org.tagline.toLowerCase().includes(term) ||
         org.fanActions.some((action) => action.toLowerCase().includes(term));
 
       const matchesCountry =

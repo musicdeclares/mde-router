@@ -1,7 +1,14 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import { supabaseAdmin } from "@/app/lib/supabase";
+import { getCountryLabel } from "@/app/lib/countries";
 import { KitClientSection } from "./kit-client-section";
+
+export interface KitOrg {
+  name: string;
+  country: string;
+  description: string;
+}
 
 function getSiteUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
@@ -19,6 +26,111 @@ async function getArtist(handle: string) {
     data: { id: string; handle: string; name: string; account_active: boolean } | null;
   };
   return data;
+}
+
+/**
+ * Get organizations associated with the artist's active or upcoming tour,
+ * filtered to those that have an description in their profile.
+ */
+async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
+  // Find active or upcoming tour (considering pre/post windows)
+  const now = new Date();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: tours } = (await (supabaseAdmin.from("router_tours") as any)
+    .select("id, start_date, end_date, pre_tour_window_days, post_tour_window_days")
+    .eq("artist_id", artistId)
+    .eq("enabled", true)
+    .order("start_date", { ascending: true })) as {
+    data: {
+      id: string;
+      start_date: string;
+      end_date: string;
+      pre_tour_window_days: number;
+      post_tour_window_days: number;
+    }[] | null;
+  };
+
+  if (!tours || tours.length === 0) return [];
+
+  // Find the active tour (within effective window) or next upcoming
+  const activeTour = tours.find((tour) => {
+    const effectiveStart = new Date(tour.start_date);
+    effectiveStart.setDate(effectiveStart.getDate() - (tour.pre_tour_window_days || 0));
+    const effectiveEnd = new Date(tour.end_date);
+    effectiveEnd.setDate(effectiveEnd.getDate() + (tour.post_tour_window_days || 0));
+    return now >= effectiveStart && now <= effectiveEnd;
+  });
+
+  const upcomingTour = !activeTour
+    ? tours.find((tour) => new Date(tour.start_date) > now)
+    : null;
+
+  const tour = activeTour || upcomingTour;
+  if (!tour) return [];
+
+  // Get tour overrides (artist-selected orgs per country)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: overrides } = (await (supabaseAdmin.from("router_tour_overrides") as any)
+    .select("org_id, country_code")
+    .eq("tour_id", tour.id)
+    .eq("enabled", true)) as {
+    data: { org_id: string; country_code: string }[] | null;
+  };
+
+  const overrideCountries = new Set((overrides || []).map((o) => o.country_code));
+  const orgIds = new Set((overrides || []).map((o) => o.org_id));
+
+  // Get country defaults for countries without overrides
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: defaults } = (await (supabaseAdmin.from("router_country_defaults") as any)
+    .select("org_id, country_code")) as {
+    data: { org_id: string; country_code: string }[] | null;
+  };
+
+  if (defaults) {
+    for (const d of defaults) {
+      if (!overrideCountries.has(d.country_code)) {
+        orgIds.add(d.org_id);
+      }
+    }
+  }
+
+  if (orgIds.size === 0) return [];
+
+  // Get org profiles with descriptions
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profiles } = (await (supabaseAdmin.from("router_org_profiles") as any)
+    .select("org_id, org_name, description")
+    .in("org_id", Array.from(orgIds))
+    .not("description", "is", null)) as {
+    data: { org_id: string; org_name: string | null; description: string }[] | null;
+  };
+
+  if (!profiles || profiles.length === 0) return [];
+
+  // Get org names from org_public_view for fallback
+  const profileOrgIds = profiles.map((p) => p.org_id);
+  const { data: orgs } = await supabaseAdmin
+    .from("org_public_view")
+    .select("id, org_name, country_code")
+    .in("id", profileOrgIds);
+
+  const orgMap = new Map(
+    (orgs || []).map((o: { id: string; org_name: string; country_code: string }) => [o.id, o]),
+  );
+
+  return profiles
+    .map((profile) => {
+      const org = orgMap.get(profile.org_id);
+      if (!org) return null;
+      return {
+        name: profile.org_name || org.org_name,
+        country: getCountryLabel(org.country_code),
+        description: profile.description,
+      };
+    })
+    .filter((o): o is KitOrg => o !== null);
 }
 
 export async function generateMetadata({
@@ -77,6 +189,7 @@ export default async function KitPage({
   }
 
   const amplifyUrl = `${getSiteUrl()}/a/${artist.handle}`;
+  const kitOrgs = await getKitOrgs(artist.id);
 
   return (
     <main className="flex min-h-screen flex-col items-center p-6 sm:p-8 print:p-0 print:min-h-0">
@@ -108,12 +221,13 @@ export default async function KitPage({
           amplifyUrl={amplifyUrl}
           artistHandle={artist.handle}
           artistName={artist.name}
+          kitOrgs={kitOrgs}
         />
 
-        {/* Where to use it */}
+        {/* Where to share your link */}
         <section className="space-y-4 print:space-y-2">
           <h2 className="text-xl font-semibold print:text-base">
-            Where to use it
+            Where to share your link
           </h2>
           <ul className="grid gap-3 sm:grid-cols-2 print:gap-1.5 print:grid-cols-2">
             {[
@@ -156,10 +270,10 @@ export default async function KitPage({
           </ul>
         </section>
 
-        {/* How it works */}
+        {/* How your link works */}
         <section className="space-y-4 print:space-y-1">
           <h2 className="text-xl font-semibold print:text-base">
-            How it works
+            How your link works
           </h2>
           <p className="text-muted-foreground leading-relaxed print:text-xs print:leading-normal">
             When fans visit this link, they&apos;re directed to a vetted,

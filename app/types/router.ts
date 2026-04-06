@@ -72,10 +72,11 @@ export interface DirectoryOrganization {
   name: string;
   country: string;
   countryCode: string;
-  mission: string;
+  tagline: string;
   fanActions: string[];
   website: string;
   ctaUrl: string;
   ctaText: string;
   imageUrl: string;
+  description: string;
 }
