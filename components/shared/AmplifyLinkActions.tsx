@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { QrCodeDialog } from "@/components/shared/QrCodeDialog";
 import { AnalyticsEvent } from "@/app/lib/analytics-events";
+import { copyToClipboard } from "@/app/lib/clipboard";
 
 interface AmplifyLinkActionsProps {
   artistHandle: string;
@@ -36,7 +37,7 @@ export function AmplifyLinkActions({
   const amplifyUrl = `${getSiteUrl()}/a/${artistHandle}`;
 
   function copyLink() {
-    navigator.clipboard.writeText(amplifyUrl);
+    copyToClipboard(amplifyUrl);
     setCopied(true);
     toast.success("Link copied to clipboard");
     setTimeout(() => setCopied(false), 2000);

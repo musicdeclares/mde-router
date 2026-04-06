@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -28,6 +29,9 @@ import {
   MapPin,
   Target,
   AlertTriangle,
+  CircleHelp,
+  Copy,
+  Check,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { OrgPublicView, OrgProfile } from "@/app/types/router";
@@ -39,12 +43,14 @@ import { ImageUpload } from "@/components/shared/ImageUpload";
 import { PauseOrgDialog } from "@/components/shared/PauseOrgDialog";
 import { useUnsavedChanges } from "@/app/lib/hooks/use-unsaved-changes";
 import { EVENTS } from "@/app/lib/analytics-events";
+import { copyToClipboard as copyText } from "@/app/lib/clipboard";
 import { UnsavedChangesIndicator } from "@/components/shared/UnsavedChangesIndicator";
 import { getCountryLabel, getCountryFlag } from "@/app/lib/countries";
 import { isSamePrimaryDomain } from "@/app/lib/url-utils";
 import { getTourStatus, formatDateRange } from "@/app/lib/tour-utils";
 
-const MAX_MISSION_LENGTH = 85;
+const MAX_TAGLINE_LENGTH = 85;
+const MAX_ORG_DESCRIPTION_LENGTH = 500;
 const MAX_CTA_TEXT_LENGTH = 35;
 
 interface LinkedTour {
@@ -103,7 +109,8 @@ export default function OrgProfilePage({
 
   // Form state
   const [orgName, setOrgName] = useState("");
-  const [mission, setMission] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [description, setOrgDescription] = useState("");
   const [ctaUrl, setCtaUrl] = useState("");
   const [ctaText, setCtaText] = useState("");
   const [fanActions, setFanActions] = useState<string[]>([]);
@@ -114,22 +121,24 @@ export default function OrgProfilePage({
   const initialValues = useMemo(
     () => ({
       orgName: profile?.org_name ?? "",
-      mission: profile?.mission ?? "",
+      tagline: profile?.tagline ?? "",
+      description: profile?.description ?? "",
       ctaUrl: profile?.cta_url ?? "",
       ctaText: profile?.cta_text ?? "",
       fanActions: profile?.fan_actions ?? [],
     }),
     [
       profile?.org_name,
-      profile?.mission,
+      profile?.tagline,
+      profile?.description,
       profile?.cta_url,
       profile?.cta_text,
       profile?.fan_actions,
     ],
   );
   const currentValues = useMemo(
-    () => ({ orgName, mission, ctaUrl, ctaText, fanActions }),
-    [orgName, mission, ctaUrl, ctaText, fanActions],
+    () => ({ orgName, tagline, description, ctaUrl, ctaText, fanActions }),
+    [orgName, tagline, description, ctaUrl, ctaText, fanActions],
   );
   const { hasUnsavedChanges, savedAt, markSaved } = useUnsavedChanges(
     initialValues,
@@ -142,6 +151,10 @@ export default function OrgProfilePage({
 
   // Pause dialog
   const [pauseDialogOpen, setPauseDialogOpen] = useState(false);
+
+  // Preview description dialog
+  const [descDialogOpen, setDescDialogOpen] = useState(false);
+  const [descCopied, setDescCopied] = useState(false);
 
   // Check if CTA URL domain matches org website
   const ctaDomainMismatch = useMemo(() => {
@@ -161,13 +174,13 @@ export default function OrgProfilePage({
     return {
       name: orgName.trim() || org.org_name,
       country: getCountryLabel(org.country_code),
-      mission: mission.trim() || org.mission_statement || "",
+      tagline: tagline.trim(),
       fanActions,
       ctaUrl: ctaUrl.trim() || org.website || "",
       ctaText: ctaText.trim() || "Get involved",
       imageUrl: profile?.image_url || org.banner || org.logo || "",
     };
-  }, [org, orgName, mission, ctaUrl, ctaText, fanActions, profile?.image_url]);
+  }, [org, orgName, tagline, ctaUrl, ctaText, fanActions, profile?.image_url]);
 
   useEffect(() => {
     fetchProfile();
@@ -196,13 +209,15 @@ export default function OrgProfilePage({
       // Populate form from existing profile
       if (data.profile) {
         setOrgName(data.profile.org_name || "");
-        setMission(data.profile.mission || "");
+        setTagline(data.profile.tagline || "");
+        setOrgDescription(data.profile.description || "");
         setCtaUrl(data.profile.cta_url || "");
         setCtaText(data.profile.cta_text || "");
         setFanActions(data.profile.fan_actions || []);
       } else {
         setOrgName("");
-        setMission("");
+        setTagline("");
+        setOrgDescription("");
         setCtaUrl("");
         setCtaText("");
         setFanActions([]);
@@ -237,7 +252,8 @@ export default function OrgProfilePage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           org_name: orgName.trim() || null,
-          mission: mission.trim() || null,
+          tagline: tagline.trim() || null,
+          description: description.trim() || null,
           cta_url: ctaUrl.trim() || null,
           cta_text: ctaText.trim() || null,
           fan_actions:
@@ -321,7 +337,8 @@ export default function OrgProfilePage({
 
       setProfile(null);
       setOrgName("");
-      setMission("");
+      setTagline("");
+      setOrgDescription("");
       setCtaUrl("");
       setCtaText("");
       setFanActions([]);
@@ -432,38 +449,53 @@ export default function OrgProfilePage({
                 </p>
               </div>
 
-              {/* Mission */}
+              {/* Tagline */}
               <div className="space-y-2">
-                <Label htmlFor="mission">Mission</Label>
+                <Label htmlFor="tagline">Directory Tagline</Label>
                 <Input
-                  id="mission"
-                  value={mission}
+                  id="tagline"
+                  value={tagline}
                   onChange={(e) =>
-                    setMission(e.target.value.slice(0, MAX_MISSION_LENGTH))
+                    setTagline(e.target.value.slice(0, MAX_TAGLINE_LENGTH))
                   }
-                  placeholder={
-                    org.mission_statement
-                      ? `Defaults to "${org.mission_statement}"`
-                      : "No default value"
-                  }
+                  placeholder="Required to appear in the directory"
                   disabled={saving}
                 />
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-xs text-muted-foreground min-w-0">
-                    {mission.trim() ? (
-                      org.mission_statement ? (
-                        <>Overrides &quot;{org.mission_statement}&quot;</>
-                      ) : (
-                        "Custom mission"
-                      )
-                    ) : org.mission_statement ? (
-                      "Customize mission"
-                    ) : (
-                      "Set organization mission"
-                    )}
+                    {tagline.trim()
+                      ? "Org will appear in the directory"
+                      : "Org will not appear in the directory until this is set"}
                   </p>
                   <span className="text-xs text-muted-foreground shrink-0">
-                    {mission.length}/{MAX_MISSION_LENGTH}
+                    {tagline.length}/{MAX_TAGLINE_LENGTH}
+                  </span>
+                </div>
+              </div>
+
+              {/* Organization Description */}
+              <div className="space-y-2">
+                <Label htmlFor="description">Organization Description</Label>
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) =>
+                    setOrgDescription(
+                      e.target.value.slice(0, MAX_ORG_DESCRIPTION_LENGTH),
+                    )
+                  }
+                  placeholder="How this organization wants to be described to artists"
+                  disabled={saving}
+                  rows={4}
+                />
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-xs text-muted-foreground min-w-0">
+                    A 1–2 paragraph description for artists. Unlike the short
+                    tagline above, this gives artists richer context for talking
+                    about the org in their own words.
+                  </p>
+                  <span className="text-xs text-muted-foreground shrink-0">
+                    {description.length}/{MAX_ORG_DESCRIPTION_LENGTH}
                   </span>
                 </div>
               </div>
@@ -598,10 +630,11 @@ export default function OrgProfilePage({
                             id: "",
                             org_id: orgId,
                             org_name: null,
-                            mission: null,
+                            tagline: null,
                             cta_url: null,
                             cta_text: null,
                             fan_actions: null,
+                            description: null,
                             image_url: url,
                             created_at: "",
                             updated_at: "",
@@ -643,9 +676,14 @@ export default function OrgProfilePage({
         <div className="lg:col-span-1">
           <div className="sticky top-6 space-y-3">
             <p className="text-sm font-medium text-muted-foreground">
-              Fan Preview
+              Directory Preview
             </p>
-            {preview && (
+            {preview && !preview.tagline && (
+              <div className="max-w-sm rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-sm text-muted-foreground">
+                Not shown in directory until a tagline is set
+              </div>
+            )}
+            {preview && preview.tagline && (
               <div className="max-w-sm">
                 {/* Card mimicking the org directory OrganizationCard */}
                 <div className="rounded-lg border border-gray-200 bg-white overflow-hidden shadow-sm">
@@ -682,15 +720,25 @@ export default function OrgProfilePage({
                       <span>{preview.country}</span>
                     </div>
 
-                    {preview.mission && (
+                    {preview.tagline && (
                       <div className="flex items-start gap-2 mb-3">
                         <Target
                           className="size-4 mt-0.5 shrink-0"
                           style={{ color: "#a6cb65" }}
                         />
                         <p className="text-sm text-gray-700 line-clamp-3">
-                          {preview.mission}
+                          {preview.tagline}
                         </p>
+                        {description.trim() && (
+                          <button
+                            type="button"
+                            onClick={() => setDescDialogOpen(true)}
+                            className="shrink-0 mt-0.5 text-gray-400 hover:text-gray-600"
+                            title="In the org's words"
+                          >
+                            <CircleHelp className="size-4" />
+                          </button>
+                        )}
                       </div>
                     )}
 
@@ -887,6 +935,36 @@ export default function OrgProfilePage({
         initialReason={orgOverride?.reason || ""}
         onSuccess={fetchProfile}
       />
+
+      {/* Organization Description Dialog (preview) */}
+      <Dialog open={descDialogOpen} onOpenChange={setDescDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{preview?.name || org.org_name}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground whitespace-pre-line">
+            {description.trim()}
+          </p>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                copyText(description.trim());
+                setDescCopied(true);
+                toast.success("Description copied");
+                setTimeout(() => setDescCopied(false), 2000);
+              }}
+            >
+              {descCopied ? (
+                <Check className="h-4 w-4 mr-2" />
+              ) : (
+                <Copy className="h-4 w-4 mr-2" />
+              )}
+              {descCopied ? "Copied" : "Copy"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Reset Confirmation Dialog */}
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>

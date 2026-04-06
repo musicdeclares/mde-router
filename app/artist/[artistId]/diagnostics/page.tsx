@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { getCountryLabel } from "@/app/lib/countries";
 import { AlertTriangle, CheckCircle2, Copy, ExternalLink, HelpCircle } from "lucide-react";
 import { EVENTS, SOURCES } from "@/app/lib/analytics-events";
+import { copyToClipboard } from "@/app/lib/clipboard";
 
 interface FallbackEvent {
   id: string;
@@ -142,7 +143,7 @@ Event ID: ${event.id}
 
 Please share this with your MDE contact for assistance.`;
 
-    navigator.clipboard.writeText(details);
+    copyToClipboard(details);
     toast.success("Details copied to clipboard");
   }
 

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Copy, Check, QrCode } from "lucide-react";
+import { Copy, Check, QrCode, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { QrCodeDialog } from "@/components/shared/QrCodeDialog";
 import { EVENTS } from "@/app/lib/analytics-events";
+import { copyToClipboard } from "@/app/lib/clipboard";
+import type { KitOrg } from "./page";
 
 function getSampleCaptions(artistName: string, url: string) {
   return [
@@ -28,15 +30,18 @@ interface KitClientSectionProps {
   amplifyUrl: string;
   artistHandle: string;
   artistName: string;
+  kitOrgs: KitOrg[];
 }
 
 export function KitClientSection({
   amplifyUrl,
   artistHandle,
   artistName,
+  kitOrgs,
 }: KitClientSectionProps) {
   const [copied, setCopied] = useState(false);
   const [copiedCaption, setCopiedCaption] = useState<number | null>(null);
+  const [copiedOrgDesc, setCopiedOrgDesc] = useState<number | null>(null);
   const [qrOpen, setQrOpen] = useState(false);
   const [printQrEl, setPrintQrEl] = useState<HTMLDivElement | null>(null);
 
@@ -91,17 +96,24 @@ export function KitClientSection({
   }, [printQrEl, amplifyUrl]);
 
   function handleCopy() {
-    navigator.clipboard.writeText(amplifyUrl);
+    copyToClipboard(amplifyUrl);
     setCopied(true);
     toast.success("Link copied");
     setTimeout(() => setCopied(false), 2000);
   }
 
   function handleCopyCaption(index: number, text: string) {
-    navigator.clipboard.writeText(text);
+    copyToClipboard(text);
     setCopiedCaption(index);
     toast.success("Caption copied");
     setTimeout(() => setCopiedCaption(null), 2000);
+  }
+
+  function handleCopyOrgDesc(index: number, text: string) {
+    copyToClipboard(text);
+    setCopiedOrgDesc(index);
+    toast.success("Description copied");
+    setTimeout(() => setCopiedOrgDesc(null), 2000);
   }
 
   return (
@@ -153,6 +165,56 @@ export function KitClientSection({
         artistHandle={artistHandle}
         artistName={artistName}
       />
+
+      {/* Organization descriptions */}
+      {kitOrgs.length > 0 && (
+        <div className="space-y-3 pt-6 print:hidden">
+          <h2 className="text-xl font-semibold">
+            About your climate action{" "}
+            {kitOrgs.length === 1 ? "organization" : "organizations"}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Descriptions provided by each organization. Use as a starting point
+            when posting about them: paraphrase freely.
+          </p>
+          <div className="space-y-3">
+            {kitOrgs.map((org, index) => (
+              <div key={index} className="border rounded-lg p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-medium">{org.name}</span>
+                    <span className="flex items-center gap-1 text-sm text-muted-foreground mt-0.5">
+                      <MapPin className="size-3" />
+                      {org.country}
+                    </span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleCopyOrgDesc(index, org.description)}
+                    className="shrink-0"
+                    data-umami-event={EVENTS.KIT_COPY_CAPTION}
+                    data-umami-event-artist={artistHandle}
+                    data-umami-event-caption={org.name}
+                  >
+                    {copiedOrgDesc === index ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                    <span className="ml-2">
+                      {copiedOrgDesc === index ? "Copied" : "Copy"}
+                    </span>
+                  </Button>
+                </div>
+                <p className="text-sm leading-relaxed whitespace-pre-line">
+                  {org.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Sample captions */}
       <div className="space-y-3 pt-6 print:hidden">

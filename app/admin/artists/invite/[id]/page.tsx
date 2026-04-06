@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { Invite } from "@/app/types/router";
 import { EVENTS, SOURCES } from "@/app/lib/analytics-events";
+import { copyToClipboard } from "@/app/lib/clipboard";
 
 export default function ViewInvitePage({
   params,
@@ -85,8 +86,8 @@ export default function ViewInvitePage({
     }
   }
 
-  function copyToClipboard(text: string, field: string) {
-    navigator.clipboard.writeText(text);
+  function handleCopy(text: string, field: string) {
+    copyToClipboard(text);
     setCopiedField(field);
     toast.success("Copied to clipboard");
     setTimeout(() => setCopiedField(null), 2000);
@@ -259,7 +260,7 @@ Music Declares Emergency`;
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => copyToClipboard(getInviteUrl(), "link")}
+                onClick={() => handleCopy(getInviteUrl(), "link")}
                 data-umami-event={EVENTS.ADMIN_COPY_INVITE}
                 data-umami-event-artist={invite.suggested_name}
                 data-umami-event-invite={invite.id}
@@ -314,7 +315,7 @@ Music Declares Emergency`;
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => copyToClipboard(getEmailSubject(), "subject")}
+                      onClick={() => handleCopy(getEmailSubject(), "subject")}
                       data-umami-event={EVENTS.ADMIN_COPY_INVITE}
                       data-umami-event-artist={invite.suggested_name}
                       data-umami-event-invite={invite.id}
@@ -341,7 +342,7 @@ Music Declares Emergency`;
                       variant="outline"
                       size="icon"
                       className="shrink-0"
-                      onClick={() => copyToClipboard(getEmailBody(), "body")}
+                      onClick={() => handleCopy(getEmailBody(), "body")}
                       data-umami-event={EVENTS.ADMIN_COPY_INVITE}
                       data-umami-event-artist={invite.suggested_name}
                       data-umami-event-invite={invite.id}
