@@ -50,7 +50,7 @@ import { isSamePrimaryDomain } from "@/app/lib/url-utils";
 import { getTourStatus, formatDateRange } from "@/app/lib/tour-utils";
 
 const MAX_TAGLINE_LENGTH = 85;
-const MAX_DESCRIPTION_LENGTH = 850;
+const MAX_DESCRIPTION_LENGTH = 1000;
 const MAX_CTA_TEXT_LENGTH = 35;
 
 interface LinkedTour {
