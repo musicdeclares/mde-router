@@ -8,6 +8,26 @@ import { EVENTS } from "@/app/lib/analytics-events";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+const MIN_WIDTH = 1200;
+const MIN_HEIGHT = 675;
+
+function getImageDimensions(
+  file: File,
+): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Could not read image dimensions"));
+    };
+    img.src = url;
+  });
+}
 
 interface ImageUploadProps {
   orgId: string;
@@ -34,6 +54,9 @@ export function ImageUpload({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Reset input immediately so the same file can be retried after a validation error
+    if (fileInputRef.current) fileInputRef.current.value = "";
+
     // Client-side validation
     if (!ALLOWED_TYPES.includes(file.type)) {
       toast.error("Invalid file type. Use JPG, PNG, or WebP.");
@@ -42,6 +65,15 @@ export function ImageUpload({
 
     if (file.size > MAX_SIZE) {
       toast.error("File too large. Maximum size is 2MB.");
+      return;
+    }
+
+    // Check minimum dimensions
+    const dimensions = await getImageDimensions(file);
+    if (dimensions.width < MIN_WIDTH || dimensions.height < MIN_HEIGHT) {
+      toast.error(
+        `Image too small: minimum size is ${MIN_WIDTH}×${MIN_HEIGHT}px but got ${dimensions.width}×${dimensions.height}px.`,
+      );
       return;
     }
 
@@ -162,7 +194,7 @@ export function ImageUpload({
       </div>
 
       <p className="text-xs text-muted-foreground">
-        JPG, PNG, or WebP. Max 2MB.
+        JPG, PNG, or WebP · Max 2MB · 16:9 ratio · Min 1200×675px
       </p>
     </div>
   );
