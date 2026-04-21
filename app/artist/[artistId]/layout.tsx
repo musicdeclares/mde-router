@@ -22,7 +22,7 @@ export default function ArtistLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [artistHandle, setArtistHandle] = useState<string | null>(null);
 
-  // Fetch artist handle for starter kit link
+  // Fetch artist handle for toolkit link
   useEffect(() => {
     async function fetchArtist() {
       try {
@@ -100,7 +100,7 @@ export default function ArtistLayout({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hidden sm:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-                  title="Starter Kit"
+                  title="Toolkit"
                   data-umami-event={EVENTS.ARTIST_VIEW_KIT}
                   data-umami-event-artist={artistHandle}
                   data-umami-event-source={SOURCES.NAV}
@@ -178,7 +178,7 @@ export default function ArtistLayout({
                   data-umami-event-artist={artistHandle}
                   data-umami-event-source={SOURCES.NAV}
                 >
-                  Starter Kit
+                  Toolkit
                   <ExternalLink className="h-3 w-3" />
                 </Link>
               )}

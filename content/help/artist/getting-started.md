@@ -51,15 +51,15 @@ This single URL:
 
 ---
 
-## Your Starter Kit
+## Your Toolkit
 
-Visit your starter kit page to get:
+Visit your toolkit page to get:
 
 - **Your AMPLIFY link**: with copy button
 - **Downloadable QR code**: print-ready, high resolution
 - **Sample social captions**: ready to copy and customize
 
-Find your starter kit at: **Dashboard → View Starter Kit**
+Find your toolkit at: **Dashboard → View Toolkit**
 
 Share this page with your team so everyone has access to the assets.
 

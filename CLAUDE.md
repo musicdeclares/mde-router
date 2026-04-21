@@ -61,7 +61,7 @@ The directory shares data with the router — both read from `org_public_view` (
 | `/` | Redirects to MDE AMPLIFY landing page (interim) |
 | `/a/{handle}` | Fan routing endpoint — redirects to org based on context |
 | `/directory` | Public org directory with search and country filter |
-| `/kit/{handle}` | Artist starter kit page with AMPLIFY link, QR code, sample captions |
+| `/kit/{handle}` | Artist toolkit page with AMPLIFY link, QR code, sample captions |
 | `/help` | Help center with documentation (filtered by user role) |
 | `/help/{audience}/{slug}` | Individual help articles (e.g., `/help/admin/tours`) |
 | `/invite/{token}` | Artist onboarding page for accepting invites |
@@ -131,7 +131,7 @@ All router tables are prefixed with `router_` for namespace separation.
 - Upload custom images (Supabase Storage)
 - Configure "fan actions" labels
 
-### Artist Starter Kit (`/kit/{handle}`)
+### Artist ToolKit (`/kit/{handle}`)
 - Public page for sharing with artists after setup
 - Copy button for AMPLIFY link
 - QR code generator (light/dark, transparent/solid bg, SVG/PNG)
@@ -220,7 +220,7 @@ app/
   lib/             # Utilities (supabase, router-logic, analytics, countries, content)
   directory/       # Public org directory
   help/            # Help center and documentation pages
-  kit/[handle]/    # Artist starter kit
+  kit/[handle]/    # Artist toolkit
   types/           # TypeScript definitions
 
 components/

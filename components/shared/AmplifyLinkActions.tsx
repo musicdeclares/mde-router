@@ -83,7 +83,7 @@ export function AmplifyLinkActions({
               data-umami-event-artist={artistHandle}
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              Starter Kit
+              Toolkit
             </Link>
           </Button>
         </div>
