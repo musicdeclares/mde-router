@@ -23,7 +23,12 @@ async function getArtist(handle: string) {
     .eq("handle", handle)
     .eq("account_active", true)
     .single()) as {
-    data: { id: string; handle: string; name: string; account_active: boolean } | null;
+    data: {
+      id: string;
+      handle: string;
+      name: string;
+      account_active: boolean;
+    } | null;
   };
   return data;
 }
@@ -38,17 +43,21 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: tours } = (await (supabaseAdmin.from("router_tours") as any)
-    .select("id, start_date, end_date, pre_tour_window_days, post_tour_window_days")
+    .select(
+      "id, start_date, end_date, pre_tour_window_days, post_tour_window_days",
+    )
     .eq("artist_id", artistId)
     .eq("enabled", true)
     .order("start_date", { ascending: true })) as {
-    data: {
-      id: string;
-      start_date: string;
-      end_date: string;
-      pre_tour_window_days: number;
-      post_tour_window_days: number;
-    }[] | null;
+    data:
+      | {
+          id: string;
+          start_date: string;
+          end_date: string;
+          pre_tour_window_days: number;
+          post_tour_window_days: number;
+        }[]
+      | null;
   };
 
   if (!tours || tours.length === 0) return [];
@@ -56,9 +65,13 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
   // Find the active tour (within effective window) or next upcoming
   const activeTour = tours.find((tour) => {
     const effectiveStart = new Date(tour.start_date);
-    effectiveStart.setDate(effectiveStart.getDate() - (tour.pre_tour_window_days || 0));
+    effectiveStart.setDate(
+      effectiveStart.getDate() - (tour.pre_tour_window_days || 0),
+    );
     const effectiveEnd = new Date(tour.end_date);
-    effectiveEnd.setDate(effectiveEnd.getDate() + (tour.post_tour_window_days || 0));
+    effectiveEnd.setDate(
+      effectiveEnd.getDate() + (tour.post_tour_window_days || 0),
+    );
     return now >= effectiveStart && now <= effectiveEnd;
   });
 
@@ -70,21 +83,24 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
   if (!tour) return [];
 
   // Get tour overrides (artist-selected orgs per country)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: overrides } = (await (supabaseAdmin.from("router_tour_overrides") as any)
+  const { data: overrides } = (await (
+    supabaseAdmin.from("router_tour_overrides") as any
+  )
     .select("org_id, country_code")
     .eq("tour_id", tour.id)
     .eq("enabled", true)) as {
     data: { org_id: string; country_code: string }[] | null;
   };
 
-  const overrideCountries = new Set((overrides || []).map((o) => o.country_code));
+  const overrideCountries = new Set(
+    (overrides || []).map((o) => o.country_code),
+  );
   const orgIds = new Set((overrides || []).map((o) => o.org_id));
 
   // Get country defaults for countries without overrides
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: defaults } = (await (supabaseAdmin.from("router_country_defaults") as any)
-    .select("org_id, country_code")) as {
+  const { data: defaults } = (await (
+    supabaseAdmin.from("router_country_defaults") as any
+  ).select("org_id, country_code")) as {
     data: { org_id: string; country_code: string }[] | null;
   };
 
@@ -99,12 +115,15 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
   if (orgIds.size === 0) return [];
 
   // Get org profiles with descriptions
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profiles } = (await (supabaseAdmin.from("router_org_profiles") as any)
+  const { data: profiles } = (await (
+    supabaseAdmin.from("router_org_profiles") as any
+  )
     .select("org_id, org_name, description")
     .in("org_id", Array.from(orgIds))
     .not("description", "is", null)) as {
-    data: { org_id: string; org_name: string | null; description: string }[] | null;
+    data:
+      | { org_id: string; org_name: string | null; description: string }[]
+      | null;
   };
 
   if (!profiles || profiles.length === 0) return [];
@@ -117,7 +136,9 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
     .in("id", profileOrgIds);
 
   const orgMap = new Map(
-    (orgs || []).map((o: { id: string; org_name: string; country_code: string }) => [o.id, o]),
+    (orgs || []).map(
+      (o: { id: string; org_name: string; country_code: string }) => [o.id, o],
+    ),
   );
 
   return profiles
@@ -142,11 +163,11 @@ export async function generateMetadata({
   const artist = await getArtist(handle);
 
   if (!artist) {
-    return { title: "AMPLIFY Starter Kit" };
+    return { title: "AMPLIFY Toolkit" };
   }
 
   return {
-    title: `${artist.name} | AMPLIFY Starter Kit`,
+    title: `${artist.name} | AMPLIFY Toolkit`,
     description: `${artist.name}'s AMPLIFY link — directing fans to climate action.`,
   };
 }
@@ -163,13 +184,13 @@ export default async function KitPage({
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-8">
         <Image
-          src="/logo.png"
+          src="/logo-amplify.png"
           alt=""
           width={500}
           height={396}
           className="w-20 h-auto mb-4"
         />
-        <p className="text-sm text-muted-foreground mb-8">Starter Kit</p>
+        <p className="text-sm text-muted-foreground mb-8">Toolkit</p>
 
         <h1 className="text-2xl font-bold mb-4">Page not found</h1>
         <p className="text-muted-foreground text-center max-w-md mb-6">
@@ -197,24 +218,34 @@ export default async function KitPage({
         {/* Header */}
         <div className="flex flex-col items-center text-center pt-8 print:pt-2">
           <Image
-            src="/logo.png"
+            src="/logo-amplify.png"
             alt=""
             width={500}
             height={396}
             className="w-20 h-auto mb-4 print:w-12 print:mb-2"
           />
-          <p className="text-sm text-muted-foreground mb-6 print:mb-2">
-            Starter Kit
-          </p>
 
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2 print:text-2xl print:mb-1">
-            {artist.name}&apos;s AMPLIFY Link
+            {artist.name}&apos;s Climate Action Link
           </h1>
           <p className="text-muted-foreground max-w-lg print:text-sm">
-            A single link that directs fans to vetted climate action
-            organizations, wherever they are.
+            One link that connects fans to a vetted climate action organization
+            so they can get involved locally.
           </p>
         </div>
+
+        {/* How your link works */}
+        <section className="space-y-4 print:space-y-1">
+          <h2 className="text-xl font-semibold print:text-base">
+            How your link works
+          </h2>
+          <p className="text-muted-foreground leading-relaxed print:text-xs print:leading-normal">
+            Fans are directed to a vetted, grassroots climate org based on their
+            location and {artist.name}&apos;s tour dates. MDE pre-screens every
+            organization. The link is evergreen: it never breaks, even between
+            tours.
+          </p>
+        </section>
 
         {/* Interactive section: link + QR */}
         <KitClientSection
@@ -232,29 +263,29 @@ export default async function KitPage({
           <ul className="grid gap-3 sm:grid-cols-2 print:gap-1.5 print:grid-cols-2">
             {[
               {
-                title: "Social bios",
+                title: "Social bios & profiles",
                 description:
-                  "Add the link to Instagram, TikTok, Linktree, or any bio page.",
-              },
-              {
-                title: "Stage visuals",
-                description:
-                  "Display the QR code on screens during shows so fans can scan it live.",
-              },
-              {
-                title: "Posters, flyers, and merch",
-                description:
-                  "Print the QR code on physical materials. It scans reliably at any size.",
-              },
-              {
-                title: "Email newsletters",
-                description:
-                  "Include the link in fan newsletters and mailing list updates.",
+                  "Add your link to Instagram, TikTok, FB, X, Linktree, or any bio page. Pair with your tour dates for context.",
               },
               {
                 title: "Social media posts",
                 description:
-                  "Share the link directly in posts, stories, or video descriptions.",
+                  "Share your link in tour-related posts, stories, or video descriptions.",
+              },
+              {
+                title: "Physical banners, flyers, & merch tables",
+                description:
+                  "Print your QR code on physical tour materials. It scans reliably at any size.",
+              },
+              {
+                title: "Stage & venue",
+                description:
+                  "Display your QR code on screens during shows, stage banners, or barricade signage for fans to scan live.",
+              },
+              {
+                title: "Email newsletters & texts to fans",
+                description:
+                  "Include your link in fan newsletters, show announcements, and mailing list updates.",
               },
             ].map((item) => (
               <li
@@ -268,20 +299,6 @@ export default async function KitPage({
               </li>
             ))}
           </ul>
-        </section>
-
-        {/* How your link works */}
-        <section className="space-y-4 print:space-y-1">
-          <h2 className="text-xl font-semibold print:text-base">
-            How your link works
-          </h2>
-          <p className="text-muted-foreground leading-relaxed print:text-xs print:leading-normal">
-            When fans visit this link, they&apos;re directed to a vetted,
-            grassroots climate action organization based on their location and{" "}
-            {artist.name}&apos;s current tour schedule. The link is evergreen:
-            it never breaks, even between tours. Outside of tour dates, fans are
-            shown a general AMPLIFY page.
-          </p>
         </section>
 
         {/* Footer */}
@@ -298,7 +315,9 @@ export default async function KitPage({
             </a>{" "}
             initiative
           </p>
-          <p className="mt-1 text-xs print:text-[10px]">No music on a dead planet.</p>
+          <p className="mt-1 text-xs print:text-[10px]">
+            No music on a dead planet.
+          </p>
         </footer>
       </div>
     </main>

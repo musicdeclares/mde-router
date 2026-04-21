@@ -12,16 +12,16 @@ import type { KitOrg } from "./page";
 function getSampleCaptions(artistName: string, url: string) {
   return [
     {
-      label: "Tour announcement",
-      text: `Join me in taking climate action! I'm partnering with @musicdeclares to direct fans to local grassroots climate organizations. Tap the link to find yours: ${url} #AMPLIFY #NoMusicOnADeadPlanet`,
+      label: "Tour & show announcements",
+      text: `Join our new tour in taking climate action now! I’m partnering with @musicdeclares to direct fans to vetted, local climate orgs that need us to volunteer: ${url} #AMPLIFY #NoMusicOnADeadPlanet`,
     },
     {
       label: "General post",
-      text: `Want to take climate action? I've teamed up with @musicdeclares to make it easy. This link connects you with vetted climate orgs in your area: ${url} #AMPLIFY`,
+      text: `Want to take climate action? I’ve teamed up with @musicdeclares to make it easy. This link connects you with vetted climate orgs that need volunteers in your area now: ${url} #AMPLIFY #NoMusicOnADeadPlanet`,
     },
     {
       label: "Short (stories/bio)",
-      text: `Climate action, wherever you are: ${url}`,
+      text: `Local climate action, volunteer wherever you are: ${url}`,
     },
   ];
 }
