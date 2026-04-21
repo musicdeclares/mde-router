@@ -17,7 +17,7 @@ export default function NotFound() {
         <CardHeader className="text-center">
           <CardTitle className="flex items-center gap-2 justify-center text-2xl font-bold">
             <Image
-              src="/logo.png"
+              src="/logo-amplify.png"
               alt=""
               width={500}
               height={396}
@@ -39,9 +39,7 @@ export default function NotFound() {
         </CardContent>
         <CardFooter className="flex flex-col gap-3">
           <Button variant="default" className="w-full" asChild>
-            <Link href="/directory">
-              Browse Climate Organizations
-            </Link>
+            <Link href="/directory">Browse Climate Organizations</Link>
           </Button>
           <a
             href="https://www.musicdeclares.net/"

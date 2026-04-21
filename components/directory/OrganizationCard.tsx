@@ -42,7 +42,10 @@ interface OrganizationCardProps {
   locale?: Locale;
 }
 
-export function OrganizationCard({ organization, locale = "en" }: OrganizationCardProps) {
+export function OrganizationCard({
+  organization,
+  locale = "en",
+}: OrganizationCardProps) {
   const content = getDirectoryContent(locale);
   const [descDialogOpen, setDescDialogOpen] = useState(false);
   const [descCopied, setDescCopied] = useState(false);
@@ -60,7 +63,7 @@ export function OrganizationCard({ organization, locale = "en" }: OrganizationCa
           ) : (
             <div className="flex items-center justify-center w-full h-full bg-gray-100">
               <img
-                src="/logo.png"
+                src="/logo-amplify.png"
                 alt=""
                 className="w-20 h-auto object-contain opacity-60"
               />

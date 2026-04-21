@@ -85,7 +85,7 @@ export function OrgsClient({
             <div className="flex items-center gap-3">
               <Image
                 className="self-start"
-                src="/logo.png"
+                src="/logo-amplify.png"
                 alt=""
                 width={500}
                 height={396}
@@ -171,7 +171,7 @@ export function OrgsClient({
                       {content.about.howItWorks.steps.map(
                         (step: string, i: number) => (
                           <li key={i}>{step}</li>
-                        )
+                        ),
                       )}
                     </ol>
                   </div>
@@ -232,7 +232,7 @@ export function OrgsClient({
             <div className="mt-4 text-sm text-muted-foreground">
               {content.search.resultsCount(
                 filteredOrganizations.length,
-                organizations.length
+                organizations.length,
               )}
             </div>
           </div>

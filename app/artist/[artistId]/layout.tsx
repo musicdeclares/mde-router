@@ -62,7 +62,7 @@ export default function ArtistLayout({
                 className="shrink-0 flex items-center gap-2 text-xl font-bold"
               >
                 <Image
-                  src="/logo.png"
+                  src="/logo-amplify.png"
                   alt=""
                   width={500}
                   height={396}

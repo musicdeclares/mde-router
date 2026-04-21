@@ -83,7 +83,7 @@ export default async function HelpPage({
         <header className="mb-6">
           <Link href="/help" className="inline-flex items-center gap-2">
             <Image
-              src="/logo.png"
+              src="/logo-amplify.png"
               alt=""
               width={500}
               height={396}

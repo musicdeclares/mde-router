@@ -96,7 +96,7 @@ function LoginForm() {
         <CardHeader className="text-center">
           <CardTitle className="flex items-center gap-2 justify-center text-2xl font-bold">
             <Image
-              src="/logo.png"
+              src="/logo-amplify.png"
               alt=""
               width={500}
               height={396}
@@ -104,9 +104,7 @@ function LoginForm() {
             />
             <span>AMPLIFY Router</span>
           </CardTitle>
-          <CardDescription>
-            Sign in to access your dashboard
-          </CardDescription>
+          <CardDescription>Sign in to access your dashboard</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
