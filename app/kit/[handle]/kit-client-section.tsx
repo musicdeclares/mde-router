@@ -70,7 +70,7 @@ export function KitClientSection({
         width: 600,
         height: 600,
         data: amplifyUrl,
-        image: "/logo.png",
+        image: "/logo-mde.png",
         qrOptions: { errorCorrectionLevel: "H" as const },
         imageOptions: {
           hideBackgroundDots: true,

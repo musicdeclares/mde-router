@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { EVENTS } from "@/app/lib/analytics-events";
 
-const LOGO_PATH = "/logo.png";
+const LOGO_LIGHT = "/logo-mde.png";
+const LOGO_DARK = "/logo-mde-rev.png";
 
 interface QrCodeDialogProps {
   artistHandle: string;
@@ -30,19 +31,20 @@ function qrOptions(
   bgColor: string,
   size: number,
   type: "canvas" | "svg",
+  logoPath: string,
 ) {
   return {
     type,
     width: size,
     height: size,
     data: url,
-    image: LOGO_PATH,
+    image: logoPath,
     qrOptions: {
       errorCorrectionLevel: "H" as const,
     },
     imageOptions: {
       hideBackgroundDots: true,
-      imageSize: 0.35,
+      imageSize: 0.45,
       margin: 8,
       crossOrigin: "anonymous",
     },
@@ -104,7 +106,14 @@ export function QrCodeDialog({
       containerEl.innerHTML = "";
 
       const qr = new QRCodeStyling(
-        qrOptions(url, dotColor, bgColor, 400, "canvas"),
+        qrOptions(
+          url,
+          dotColor,
+          bgColor,
+          400,
+          "canvas",
+          darkMode ? LOGO_DARK : LOGO_LIGHT,
+        ),
       );
       qr.append(containerEl);
       qrRef.current = qr;
@@ -119,7 +128,16 @@ export function QrCodeDialog({
   // Update QR code when colors change (without recreating)
   useEffect(() => {
     if (!qrRef.current) return;
-    qrRef.current.update(qrOptions(url, dotColor, bgColor, 400, "canvas"));
+    qrRef.current.update(
+      qrOptions(
+        url,
+        dotColor,
+        bgColor,
+        400,
+        "canvas",
+        darkMode ? LOGO_DARK : LOGO_LIGHT,
+      ),
+    );
   }, [dotColor, bgColor, url]);
 
   const downloadFile = useCallback(
@@ -139,12 +157,17 @@ export function QrCodeDialog({
           bgColor,
           size,
           extension === "png" ? "canvas" : "svg",
+          darkMode ? LOGO_DARK : LOGO_LIGHT,
         ),
       );
 
       const variant = darkMode
-        ? solidBg ? "light-on-dark-bg" : "light-on-transparent"
-        : solidBg ? "dark-on-light-bg" : "dark-on-transparent";
+        ? solidBg
+          ? "light-on-dark-bg"
+          : "light-on-transparent"
+        : solidBg
+          ? "dark-on-light-bg"
+          : "dark-on-transparent";
 
       await qr.download({
         name: `amplify-${artistHandle}-qr-${variant}`,
