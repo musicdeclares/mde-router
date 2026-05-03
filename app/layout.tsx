@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Karla } from "next/font/google";
 import Script from "next/script";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={karla.className}>
         {children}
         <Toaster />
+        <SpeedInsights />
         <Script
           defer
           src="https://mde-umami.vercel.app/script.js"
