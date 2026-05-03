@@ -83,13 +83,12 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
   if (!tour) return [];
 
   // Get tour overrides (artist-selected orgs per country)
-  const { data: overrides } = (await (
-    supabaseAdmin.from("router_tour_overrides") as any
-  )
+  const { data: overrides } = (await supabaseAdmin
+    .from("router_tour_overrides")
     .select("org_id, country_code")
     .eq("tour_id", tour.id)
-    .eq("enabled", true)) as {
-    data: { org_id: string; country_code: string }[] | null;
+    .eq("enabled", true)) as unknown as {
+    data: { org_id: string | null; country_code: string }[] | null;
   };
 
   const overrideCountries = new Set(
@@ -98,9 +97,9 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
   const orgIds = new Set((overrides || []).map((o) => o.org_id));
 
   // Get country defaults for countries without overrides
-  const { data: defaults } = (await (
-    supabaseAdmin.from("router_country_defaults") as any
-  ).select("org_id, country_code")) as {
+  const { data: defaults } = (await supabaseAdmin
+    .from("router_country_defaults")
+    .select("org_id, country_code")) as unknown as {
     data: { org_id: string; country_code: string }[] | null;
   };
 
@@ -115,15 +114,12 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
   if (orgIds.size === 0) return [];
 
   // Get org profiles with descriptions
-  const { data: profiles } = (await (
-    supabaseAdmin.from("router_org_profiles") as any
-  )
+  const { data: profiles } = (await supabaseAdmin
+    .from("router_org_profiles")
     .select("org_id, org_name, description")
     .in("org_id", Array.from(orgIds))
-    .not("description", "is", null)) as {
-    data:
-      | { org_id: string; org_name: string | null; description: string }[]
-      | null;
+    .not("description", "is", null)) as unknown as {
+    data: { org_id: string; org_name: string | null; description: string | null }[] | null;
   };
 
   if (!profiles || profiles.length === 0) return [];
@@ -148,7 +144,7 @@ async function getKitOrgs(artistId: string): Promise<KitOrg[]> {
       return {
         name: profile.org_name || org.org_name,
         country: getCountryLabel(org.country_code),
-        description: profile.description,
+        description: profile.description!,
       };
     })
     .filter((o): o is KitOrg => o !== null);
