@@ -51,7 +51,7 @@ function buildFallbackUrl(params: {
   if (params.countryCode) {
     searchParams.set("country", params.countryCode);
   }
-  return `${base}/?${searchParams.toString()}`;
+  return `${base}/act?${searchParams.toString()}`;
 }
 
 export async function routeRequest(
