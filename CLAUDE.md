@@ -58,7 +58,8 @@ The directory shares data with the router — both read from `org_public_view` (
 ### Public Routes
 | Route | Description |
 |-------|-------------|
-| `/` | Redirects to MDE AMPLIFY landing page (interim) |
+| `/` | AMPLIFY homepage — explains the program, CTAs for prospective artists |
+| `/act` | Fan landing page — shown when no org match found (fallback) |
 | `/a/{handle}` | Fan routing endpoint — redirects to org based on context |
 | `/directory` | Public org directory with search and country filter |
 | `/kit/{handle}` | Artist toolkit page with AMPLIFY link, QR code, sample captions |
@@ -248,7 +249,7 @@ content/
 - **Country-only routing** for MVP — no city or venue-level granularity yet
 - **Fallbacks are intentional** — "no tour" or "no org for country" are valid states, not errors
 - **Artist handles are permanent** — once created, they become public URLs that shouldn't be deleted
-- **Home page redirects to MDE site** (interim) — will switch to org directory when ready for launch
+- **Home page is artist-facing** — explains AMPLIFY to prospective artists, primary CTA is a mailto to hellous@musicdeclares.net (interim until self-service registration is built)
 - **Org directory integrated** — lives in same codebase, shares data with router via `router_org_profiles`
 - **No artist link pause** — Tour windows already control when routing is active; a separate "pause link" toggle added confusion without value. DB columns (`link_active`, `link_inactive_reason`) retained for potential future use
 
@@ -293,7 +294,7 @@ When ready to promote the org directory for public discovery:
 - [ ] Consider structured data (JSON-LD) for organizations
 - [ ] Update Umami `data-domains` if domain changes from amplify.musicdeclares.net
 
-Note: Home page (`/`) is now the fallback page with Climate Reality Project CTA. Directory remains at `/directory`.
+Note: Fan fallback page is at `/act`. Directory remains at `/directory`.
 
 ## Keeping Docs in Sync
 
