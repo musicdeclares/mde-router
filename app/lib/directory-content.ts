@@ -46,23 +46,6 @@ export const directoryContent = {
       subtitle:
         "Connecting music lovers with climate action organizations worldwide",
     },
-    about: {
-      heading: "About the AMPLIFY Program",
-      intro:
-        "AMPLIFY empowers artists with easy-to-use tools to move their fans to take meaningful climate actions through high-impact, vetted partners. Collective action through volunteering is one of the most powerful ways to address the climate and ecological emergency.",
-      mission: {
-        heading: "Our Mission",
-        text: "To make it easy for artists to plug into the climate movement by filling the volunteer pipeline for effective grassroots partner programs with carefully curated calls to action. AMPLIFY recommends partner organizations by country and suggests approaches to activate fans.",
-      },
-      howItWorks: {
-        heading: "How It Works",
-        steps: [
-          "Music Declares Emergency (MDE) provides a call-to-action link with a toolkit that includes QR codes for live performances, sample social posts and clear messaging to activate fans to take action through our climate partners.",
-          "Artists share the link with fans at shows, on social media, through email, or over SMS.",
-          "MDE shares results with artists regularly and collaborates for continuous improvement for maximum impact.",
-        ],
-      },
-    },
     search: {
       placeholder: "Search organizations...",
       resultsCount: (showing: number, total: number) =>
@@ -115,23 +98,6 @@ export const directoryContent = {
       titleSuffix: "Répertoire des organisations",
       subtitle:
         "Connecter les fans de musique aux organisations climatiques du monde entier",
-    },
-    about: {
-      heading: "À propos du programme AMPLIFY",
-      intro:
-        "AMPLIFY donne aux artistes des outils simples pour inciter leurs fans à agir concrètement pour le climat via des partenaires vérifiés à fort impact. L'action collective par le bénévolat est l'un des moyens les plus puissants pour faire face à l'urgence climatique et écologique.",
-      mission: {
-        heading: "Notre mission",
-        text: "Faciliter l'engagement des artistes dans le mouvement climatique en alimentant le réseau de bénévoles des programmes partenaires efficaces avec des appels à l'action soigneusement sélectionnés. AMPLIFY recommande des organisations partenaires par pays et suggère des approches pour mobiliser les fans.",
-      },
-      howItWorks: {
-        heading: "Comment ça marche",
-        steps: [
-          "Music Declares Emergency (MDE) fournit un lien d'action avec une boîte à outils comprenant des codes QR pour les concerts, des exemples de publications et des messages clairs pour inciter les fans à agir via nos partenaires climatiques.",
-          "Les artistes partagent le lien avec leurs fans lors des concerts, sur les réseaux sociaux, par email ou par SMS.",
-          "MDE partage régulièrement les résultats avec les artistes et collabore pour une amélioration continue et un impact maximal.",
-        ],
-      },
     },
     search: {
       placeholder: "Rechercher des organisations...",

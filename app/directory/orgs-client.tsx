@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { OrganizationCard } from "@/components/directory/OrganizationCard";
 import {
   Select,
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronRight, AlertCircle, Globe } from "lucide-react";
+import { Search, AlertCircle, Globe } from "lucide-react";
 import type { DirectoryOrganization } from "@/app/types/router";
 import { EVENTS } from "@/app/lib/analytics-events";
 import {
@@ -53,8 +54,6 @@ export function OrgsClient({
   const content = getDirectoryContent(locale);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<string>("all");
-  const [aboutOpen, setAboutOpen] = useState(false);
-
   // Get unique countries from fetched data
   const availableCountries = useMemo(() => {
     return Array.from(new Set(organizations.map((o) => o.country))).sort();
@@ -83,15 +82,17 @@ export function OrgsClient({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Image
-                className="self-start"
-                src="/logo-amplify.png"
-                alt=""
-                width={500}
-                height={396}
-                priority
-                style={{ width: 100, height: "auto" }}
-              />
+              <Link href="/">
+                <Image
+                  className="self-start"
+                  src="/logo-amplify.png"
+                  alt="MDE AMPLIFY home"
+                  width={500}
+                  height={396}
+                  priority
+                  style={{ width: 100, height: "auto" }}
+                />
+              </Link>
               <div>
                 <h1 className="text-2xl font-bold mb-3 text-foreground">
                   {content.header.title}{" "}
@@ -133,54 +134,6 @@ export function OrgsClient({
           </div>
         </div>
       </header>
-
-      {/* Program Information - Collapsible using CSS grid pattern */}
-      <div className="border-b border-gray-200 bg-mde-yellow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <button
-            type="button"
-            onClick={() => setAboutOpen((o) => !o)}
-            aria-expanded={aboutOpen}
-            className="w-full py-4 flex items-center justify-between"
-          >
-            <span className="font-semibold text-lg text-mde-body">
-              {content.about.heading}
-            </span>
-            <ChevronRight
-              className={`size-5 text-mde-body transition-transform duration-200 ${aboutOpen ? "rotate-90" : ""}`}
-            />
-          </button>
-          <div
-            className={`grid transition-[grid-template-rows] duration-200 ease-out ${aboutOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-          >
-            <div className="overflow-hidden">
-              <div className="pb-6 prose max-w-none text-mde-body">
-                <p className="mb-4">{content.about.intro}</p>
-                <div className="grid md:grid-cols-2 gap-6 mt-6">
-                  <div>
-                    <h3 className="font-bold mb-2">
-                      {content.about.mission.heading}
-                    </h3>
-                    <p className="text-sm">{content.about.mission.text}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-bold mb-2">
-                      {content.about.howItWorks.heading}
-                    </h3>
-                    <ol className="text-sm">
-                      {content.about.howItWorks.steps.map(
-                        (step: string, i: number) => (
-                          <li key={i}>{step}</li>
-                        ),
-                      )}
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Search and Filters — only show when data exists */}
       {!error && organizations.length > 0 && (
