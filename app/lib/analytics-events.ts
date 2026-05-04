@@ -18,6 +18,11 @@
  */
 
 export const EVENTS = {
+  // === Homepage ===
+  HOME_CTA_EMAIL: "home-cta-email",
+  HOME_CTA_SIGNUP: "home-cta-signup",
+  HOME_CTA_DIRECTORY: "home-cta-directory",
+
   // === Fallback Page ===
   FALLBACK_CTA_GLOBAL: "fallback-cta-global",
   FALLBACK_CTA_DIRECTORY: "fallback-cta-directory",
