@@ -155,10 +155,14 @@ All router tables are prefixed with `router_` for namespace separation.
 
 ```
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+SUPABASE_SECRET_KEY
 NEXT_PUBLIC_SITE_URL          # For canonical URLs in kit page
 ```
+
+### Local Supabase
+
+`.env.local` points to the local Supabase instance at `http://127.0.0.1:54321` (API). The Studio dashboard is at `http://127.0.0.1:54323`. Start the local instance with `supabase start` (requires the Supabase CLI: `brew install supabase/tap/supabase`).
 
 ## Deployment
 

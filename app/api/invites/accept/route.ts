@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/app/types/database";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY!;
 
 // GET - Validate token and return invite details for form pre-population
 export async function GET(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseServiceKey);
+    const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseSecretKey);
 
     const { data: invite, error } = (await supabaseAdmin
       .from("router_invites")
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseServiceKey);
+    const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseSecretKey);
 
     // 1. Validate token
     const { data: invite, error: inviteError } = (await supabaseAdmin
@@ -266,7 +266,7 @@ export async function POST(request: NextRequest) {
       .eq("id", invite.id);
 
     // 7. Sign in the user and set cookies
-    const supabaseAuth = createClient<Database>(supabaseUrl, supabaseAnonKey);
+    const supabaseAuth = createClient<Database>(supabaseUrl, supabasePublishableKey);
     const { data: sessionData, error: signInError } = await supabaseAuth.auth.signInWithPassword({
       email: invite.email,
       password,

@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 
 export default function ResetPasswordPage() {
   const router = useRouter()
@@ -24,7 +24,7 @@ export default function ResetPasswordPage() {
   useEffect(() => {
     // Check if we have a valid session from the reset link
     const checkSession = async () => {
-      const supabase = createClient(supabaseUrl, supabaseAnonKey)
+      const supabase = createClient(supabaseUrl, supabasePublishableKey)
       const { data: { session } } = await supabase.auth.getSession()
       setHasToken(!!session)
     }
@@ -48,7 +48,7 @@ export default function ResetPasswordPage() {
     setLoading(true)
 
     try {
-      const supabase = createClient(supabaseUrl, supabaseAnonKey)
+      const supabase = createClient(supabaseUrl, supabasePublishableKey)
 
       const { error } = await supabase.auth.updateUser({
         password,

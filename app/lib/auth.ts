@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/app/types/database";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
 export type UserRole = "admin" | "staff" | "artist";
 
@@ -15,7 +15,7 @@ export interface AuthUser {
 
 // Create a Supabase client for auth operations (uses anon key + user session)
 export function createAuthClient() {
-  return createClient<Database>(supabaseUrl, supabaseAnonKey);
+  return createClient<Database>(supabaseUrl, supabasePublishableKey);
 }
 
 // Sign in with email and password

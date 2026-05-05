@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "@/app/types/database";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use anon client for auth (public operation)
-    const supabaseAuth = createClient<Database>(supabaseUrl, supabaseAnonKey);
+    const supabaseAuth = createClient<Database>(supabaseUrl, supabasePublishableKey);
 
     const { data: authData, error: authError } =
       await supabaseAuth.auth.signInWithPassword({
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     // Use service role client to bypass RLS for router_users lookup
     const supabaseAdmin = createClient<Database>(
       supabaseUrl,
-      supabaseServiceKey,
+      supabaseSecretKey,
     );
 
     // Fetch user role from router_users table

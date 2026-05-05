@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY!;
 
 // Routes that don't require authentication
 const publicRoutes = [
@@ -62,7 +62,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check for session cookie
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createClient(supabaseUrl, supabasePublishableKey, {
     auth: {
       persistSession: false,
     },
@@ -111,7 +111,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Fetch user role using service role to bypass RLS
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseAdmin = createClient(supabaseUrl, supabaseSecretKey);
     const { data: routerUser, error: userError } = await supabaseAdmin
       .from("router_users")
       .select("role, artist_id, enabled")
