@@ -62,20 +62,9 @@ export default function HomePage() {
                 <Mail className="ml-2 size-4" />
               </a>
             </Button>
-            <div className="flex flex-wrap gap-10">
-              <div>
-                <p className="text-3xl font-bold text-foreground">13.5%</p>
-                <p className="text-sm text-muted-foreground">fan action rate</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-foreground">35,000+</p>
-                <p className="text-sm text-muted-foreground">actions driven</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-foreground">25</p>
-                <p className="text-sm text-muted-foreground">shows</p>
-              </div>
-            </div>
+            <p className="text-lg text-muted-foreground">
+              One 25-show arena tour. 35,000+ fan actions. 13.5% conversion rate.
+            </p>
           </div>
         </section>
 
@@ -164,10 +153,9 @@ export default function HomePage() {
                 </h3>
                 <p className="text-muted-foreground">
                   For venues with screens, this is one of our most powerful
-                  tools. Ask the venue to play it before your set—we&apos;ve
-                  seen 13.5% of fans take action through a pre-show video. If
-                  your venue can&apos;t accommodate it, the QR code and
-                  one-pager still do the job.
+                  tools. Ask the venue to play it before your set—in our pilot,
+                  it drove a 13.5% conversion rate in one arena tour. If your venue can&apos;t
+                  accommodate it, the QR code and one-pager still do the job.
                 </p>
               </div>
             </div>
