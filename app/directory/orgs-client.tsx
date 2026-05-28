@@ -80,16 +80,16 @@ export function OrgsClient({
       {/* Header */}
       <header className="border-b border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Link href="/">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex items-start gap-3">
+              <Link href="/" className="shrink-0">
                 <Image
                   src="/logo-mde.png"
                   alt="MDE AMPLIFY home"
                   width={500}
                   height={396}
                   priority
-                  style={{ width: 100, height: "auto" }}
+                  style={{ width: 80, height: "auto" }}
                 />
               </Link>
               <div>
@@ -107,7 +107,7 @@ export function OrgsClient({
 
             {/* Language Switcher */}
             {mounted && (
-              <div className="flex items-center gap-1 text-sm shrink-0">
+              <div className="flex items-center gap-1 text-sm shrink-0 self-end sm:self-auto">
                 <Globe className="size-4 text-muted-foreground" />
                 {(Object.keys(localeNames) as Locale[]).map((loc, i) => (
                   <span key={loc} className="flex items-center">
