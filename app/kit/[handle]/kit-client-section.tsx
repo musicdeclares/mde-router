@@ -12,16 +12,19 @@ import type { KitOrg } from "./page";
 function getSampleCaptions(artistName: string, url: string) {
   return [
     {
-      label: "Tour & show announcements",
-      text: `Join our new tour in taking climate action now! I’m partnering with @musicdeclares to direct fans to vetted, local climate orgs that need us to volunteer: ${url} #AMPLIFY #NoMusicOnADeadPlanet`,
+      label: "Short",
+      platform: "X / Twitter",
+      text: `I’m joining @musicdeclares to connect fans with local climate orgs doing real work. Tap the link to find one near you: ${url} #AMPLIFY #NoMusicOnADeadPlanet`,
     },
     {
-      label: "General post",
-      text: `Want to take climate action? I’ve teamed up with @musicdeclares to make it easy. This link connects you with vetted climate orgs that need volunteers in your area now: ${url} #AMPLIFY #NoMusicOnADeadPlanet`,
+      label: "Medium",
+      platform: "Instagram, Facebook, Text",
+      text: `I’m part of the AMPLIFY program with @musicdeclares — connecting fans with vetted, grassroots climate organizations wherever you are. Click the link to find one in your country and get involved: ${url}`,
     },
     {
-      label: "Short (stories/bio)",
-      text: `Local climate action, volunteer wherever you are: ${url}`,
+      label: "Long",
+      platform: "Email newsletter",
+      text: `I wanted to share something I’m genuinely excited about. I’ve joined Music Declares Emergency’s AMPLIFY program, which connects fans with vetted, grassroots climate organizations — locally, wherever you are in the world. Every time you click this link, you’ll be matched with a group already doing real work in your country that needs support. No big ask, no pressure — just a simple way to plug in if you want to. Here’s the link: ${url}`,
     },
   ];
 }
@@ -220,16 +223,17 @@ export function KitClientSection({
       <div className="space-y-3 pt-6 print:hidden">
         <h2 className="text-xl font-semibold">Sample captions</h2>
         <p className="text-sm text-muted-foreground">
-          Ready-to-use text for social media posts. Copy and customize as
+          Ready-to-use text for social media posts and email newsletters. Copy and customize as
           needed.
         </p>
         <div className="space-y-3">
           {captions.map((caption, index) => (
             <div key={index} className="border rounded-lg p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">
-                  {caption.label}
-                </span>
+                <div>
+                  <span className="text-sm font-medium">{caption.label}</span>
+                  <span className="block text-xs text-muted-foreground">{caption.platform}</span>
+                </div>
                 <Button
                   variant="outline"
                   size="sm"
