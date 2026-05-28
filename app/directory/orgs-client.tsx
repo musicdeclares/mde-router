@@ -84,8 +84,7 @@ export function OrgsClient({
             <div className="flex items-center gap-3">
               <Link href="/">
                 <Image
-                  className="self-start"
-                  src="/logo-amplify.png"
+                  src="/logo-mde.png"
                   alt="MDE AMPLIFY home"
                   width={500}
                   height={396}

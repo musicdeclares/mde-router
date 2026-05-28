@@ -180,7 +180,7 @@ export default async function KitPage({
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-8">
         <Image
-          src="/logo-amplify.png"
+          src="/logo-mde.png"
           alt=""
           width={500}
           height={396}
@@ -214,7 +214,7 @@ export default async function KitPage({
         {/* Header */}
         <div className="flex flex-col items-center text-center pt-8 print:pt-2">
           <Image
-            src="/logo-amplify.png"
+            src="/logo-mde.png"
             alt=""
             width={500}
             height={396}

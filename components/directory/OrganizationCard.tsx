@@ -63,7 +63,7 @@ export function OrganizationCard({
           ) : (
             <div className="flex items-center justify-center w-full h-full bg-gray-100">
               <img
-                src="/logo-amplify.png"
+                src="/logo-mde.png"
                 alt=""
                 className="w-20 h-auto object-contain opacity-60"
               />

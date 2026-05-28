@@ -69,7 +69,7 @@ export default async function HelpIndexPage() {
         {/* Header */}
         <header className="text-center mb-12">
           <Image
-            src="/logo-amplify.png"
+            src="/logo-mde.png"
             alt=""
             width={500}
             height={396}

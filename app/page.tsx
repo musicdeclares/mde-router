@@ -22,7 +22,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Image
-                src="/logo-amplify.png"
+                src="/logo-mde.png"
                 alt=""
                 width={500}
                 height={396}

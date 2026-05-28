@@ -64,7 +64,7 @@ export function FallbackPageClient({ initialLocale }: FallbackPageClientProps) {
             <div className="flex items-center gap-3">
               <Image
                 className="self-start"
-                src="/logo-amplify.png"
+                src="/logo-mde.png"
                 alt=""
                 width={500}
                 height={396}

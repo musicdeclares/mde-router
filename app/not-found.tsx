@@ -17,7 +17,7 @@ export default function NotFound() {
         <CardHeader className="text-center">
           <CardTitle className="flex items-center gap-2 justify-center text-2xl font-bold">
             <Image
-              src="/logo-amplify.png"
+              src="/logo-mde.png"
               alt=""
               width={500}
               height={396}
