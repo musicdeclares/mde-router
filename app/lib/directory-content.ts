@@ -83,6 +83,7 @@ export const directoryContent = {
       mde: "Music Declares Emergency",
       initiative: "initiative",
       tagline: "No music on a dead planet.",
+      copyright: "Music Declares Emergency. All rights reserved.",
     },
   },
   fr: {
@@ -137,6 +138,7 @@ export const directoryContent = {
       mde: "Music Declares Emergency",
       initiative: "",
       tagline: "Pas de musique sur une planète morte.",
+      copyright: "Music Declares Emergency. Tous droits réservés.",
     },
   },
 };

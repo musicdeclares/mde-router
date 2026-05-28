@@ -222,7 +222,7 @@ export default async function KitPage({
           />
 
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2 print:text-2xl print:mb-1">
-            {artist.name}&apos;s Climate Action Link
+            {artist.name}&apos;s AMPLIFY Toolkit
           </h1>
           <p className="text-muted-foreground max-w-lg print:text-sm">
             One link that connects fans to a vetted climate action organization
@@ -297,6 +297,71 @@ export default async function KitPage({
           </ul>
         </section>
 
+        {/* Resources */}
+        <section className="space-y-4 print:hidden">
+          <h2 className="text-xl font-semibold print:text-base">Resources</h2>
+          <p className="text-muted-foreground print:text-xs">
+            Download and share these materials to promote your AMPLIFY
+            participation.
+          </p>
+          <ul className="grid gap-3 sm:grid-cols-3 print:gap-1.5 print:grid-cols-3">
+            {[
+              {
+                title: "MDE Logo",
+                description: "Official Music Declares Emergency logo for promotional materials.",
+                href: "https://ia601401.us.archive.org/22/items/mde-logo/1-MDE-Logo.png",
+                label: "Download",
+              },
+              {
+                title: "Promo Video",
+                description: "Generic artist promo video with AMPLIFY QR code. Contact Pete to customize it with your link.",
+                href: "https://archive.org/details/mde-promo-music-all-around-us-v-008",
+                label: "View",
+              },
+              {
+                title: "Program One-Sheet",
+                description: "Overview of the AMPLIFY program — share with your team or management.",
+                href: "https://archive.org/details/amplify-program-one-sheet",
+                label: "View",
+              },
+            ].map((item) => (
+              <li
+                key={item.title}
+                className="border rounded-lg p-4 space-y-1 flex flex-col print:p-2 print:space-y-0"
+              >
+                <p className="font-medium print:text-sm">{item.title}</p>
+                <p className="text-sm text-muted-foreground grow print:text-xs">
+                  {item.description}
+                </p>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm underline hover:text-foreground text-muted-foreground mt-2 print:text-xs"
+                >
+                  {item.label} &rarr;
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Questions */}
+        <section className="space-y-2 print:space-y-1">
+          <h2 className="text-xl font-semibold print:text-base">Questions?</h2>
+          <p className="text-muted-foreground leading-relaxed print:text-xs">
+            Contact{" "}
+            <strong>Pete Kronowitt</strong>, Director of the AMPLIFY program, at{" "}
+            <a
+              href="mailto:hellous@musicdeclares.net"
+              className="underline hover:text-foreground"
+            >
+              hellous@musicdeclares.net
+            </a>
+            .
+          </p>
+        </section>
+
         {/* Footer */}
         <footer className="text-center text-sm text-muted-foreground pb-8 print:pb-0 print:text-xs">
           <p>
@@ -313,6 +378,9 @@ export default async function KitPage({
           </p>
           <p className="mt-1 text-xs print:text-[10px]">
             No music on a dead planet.
+          </p>
+          <p className="mt-2 text-xs print:text-[10px]">
+            &copy; {new Date().getFullYear()} Music Declares Emergency. All rights reserved.
           </p>
         </footer>
       </div>

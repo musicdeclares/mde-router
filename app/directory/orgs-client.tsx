@@ -269,6 +269,9 @@ export function OrgsClient({
             <p className="mt-1 text-sm text-muted-foreground">
               {content.footer.tagline}
             </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} {content.footer.copyright}
+            </p>
           </div>
         </div>
       </footer>
