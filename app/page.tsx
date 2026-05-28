@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Check, Mail } from "lucide-react";
 import { EVENTS } from "@/app/lib/analytics-events";
 
 export const metadata: Metadata = {
@@ -12,6 +12,33 @@ export const metadata: Metadata = {
 };
 
 const mailtoHref = `mailto:hellous@musicdeclares.net?subject=${encodeURIComponent("Request to join AMPLIFY")}&body=${encodeURIComponent("Hi, MDE team:\n\n[artist name] is interested in joining AMPLIFY. A bit about us:\n- Upcoming shows/tour: \n- Social following/reach: \n\nLooking forward to connecting.\n[your name]")}`;
+
+const valueProps = [
+  {
+    label: "Deepens fan engagement",
+    description: "Converts listeners into community",
+  },
+  {
+    label: "Minimal workload",
+    description: "We handle everything; you just share",
+  },
+  {
+    label: "Works everywhere",
+    description: "Tour, social, email, all in one link",
+  },
+  {
+    label: "Geolocation routing",
+    description: "Fans auto-directed to local orgs in their country",
+  },
+  {
+    label: "Strengthens your brand",
+    description: "Matches fan demand for artist activism",
+  },
+  {
+    label: "Long-term partnership",
+    description: "Sustained infrastructure for climate action",
+  },
+];
 
 export default function HomePage() {
   return (
@@ -45,6 +72,9 @@ export default function HomePage() {
         {/* Hero */}
         <section className="py-16 sm:py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-sm font-semibold tracking-widest uppercase text-muted-foreground mb-4">
+              One link. Minimal lift.
+            </p>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
               Turn fan attention into real-world climate action
             </h1>
@@ -62,14 +92,41 @@ export default function HomePage() {
                 <Mail className="ml-2 size-4" />
               </a>
             </Button>
-            <p className="text-lg text-muted-foreground">
-              One 25-show arena tour. 35,000+ fan actions. 13.5% conversion rate.
-            </p>
+            <div className="space-y-1">
+              <p className="text-lg text-muted-foreground">
+                One 25-show arena tour. 34,000+ fan actions. 13.5% conversion
+                rate.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                4,100+ signed artists &middot; Global network &middot; Est. 2019
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Why it works */}
+        <section className="py-16 bg-muted">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold mb-8">Why it works</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {valueProps.map(({ label, description }) => (
+                <div key={label} className="flex gap-3">
+                  <Check className="size-5 shrink-0 mt-0.5 text-green-700" />
+                  <p>
+                    <span className="font-semibold">{label}</span>
+                    <span className="text-muted-foreground">
+                      {" "}
+                      — {description}
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* How it works */}
-        <section className="py-16 bg-muted">
+        <section className="py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold mb-8">How it works</h2>
             <div className="space-y-8">
@@ -119,44 +176,56 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* What MDE provides */}
-        <section className="py-16">
+        {/* What we handle / What you handle */}
+        <section className="py-16 bg-muted">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold mb-2">What MDE provides</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              A clear division of effort
+            </h2>
             <p className="text-muted-foreground mb-10">
               We want to make it as easy as possible for you to turn your fans
-              into a force for change—without adding anything to your plate.
+              into a force for change <em>without adding anything to your plate</em>.
             </p>
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-lg font-semibold mb-2">
-                  Your custom QR code &amp; link
-                </h3>
-                <p className="text-muted-foreground">
-                  Drop it into your social posts, show posters, or anywhere your
-                  fans connect with you. Every scan sends them straight to
-                  volunteer opportunities with our AMPLIFY partners.
-                </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold mb-4">We handle</h3>
+                <ul className="space-y-3 text-muted-foreground">
+                  <li className="flex gap-2.5">
+                    <Check className="size-4 shrink-0 mt-0.5 text-green-700" />
+                    Partner vetting
+                  </li>
+                  <li className="flex gap-2.5">
+                    <Check className="size-4 shrink-0 mt-0.5 text-green-700" />
+                    Core messaging
+                  </li>
+                  <li className="flex gap-2.5">
+                    <Check className="size-4 shrink-0 mt-0.5 text-green-700" />
+                    Link performance reporting
+                  </li>
+                </ul>
               </div>
-              <div>
-                <h3 className="text-lg font-semibold mb-2">
-                  A one-pager for your merch table
-                </h3>
-                <p className="text-muted-foreground">
-                  Just print it and set it out. Fans who want to learn more can
-                  grab it while they&apos;re browsing.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold mb-2">
-                  A pre-show video with your QR code
-                </h3>
-                <p className="text-muted-foreground">
-                  For venues with screens, this is one of our most powerful
-                  tools. Ask the venue to play it before your set—in our pilot,
-                  it drove a 13.5% conversion rate in one arena tour. If your venue can&apos;t
-                  accommodate it, the QR code and one-pager still do the job.
-                </p>
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold mb-4">You handle</h3>
+                <ul className="space-y-3 text-muted-foreground">
+                  <li className="flex gap-2.5">
+                    <span className="shrink-0 mt-0.5 w-4 text-center leading-none">
+                      &middot;
+                    </span>
+                    Display QR code at shows (on-screen, merch table)
+                  </li>
+                  <li className="flex gap-2.5">
+                    <span className="shrink-0 mt-0.5 w-4 text-center leading-none">
+                      &middot;
+                    </span>
+                    Post link in socials (IG, TikTok, X)
+                  </li>
+                  <li className="flex gap-2.5">
+                    <span className="shrink-0 mt-0.5 w-4 text-center leading-none">
+                      &middot;
+                    </span>
+                    Share link in email newsletters
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -187,6 +256,25 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Bottom CTA */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold mb-2">
+              Ready to activate your fans?
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Get in touch, and we&apos;ll share your AMPLIFY toolkit with you: your unique
+              AMPLIFY link, QR code assets, social templates, and a usage guide.
+            </p>
+            <Button asChild size="lg">
+              <a href={mailtoHref} data-umami-event={EVENTS.HOME_CTA_EMAIL}>
+                Get in touch
+                <Mail className="ml-2 size-4" />
+              </a>
+            </Button>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
@@ -203,6 +291,10 @@ export default function HomePage() {
               Music Declares Emergency
             </a>{" "}
             initiative
+          </p>
+          <p className="mt-2 text-center text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} Music Declares Emergency. All
+            rights reserved.
           </p>
         </div>
       </footer>
