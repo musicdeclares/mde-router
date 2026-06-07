@@ -89,6 +89,7 @@ export async function PUT(
 
     // Only include fields that are provided (handle is immutable, so we skip it)
     if (body.name !== undefined) updates.name = body.name;
+    if (body.flyer_quote !== undefined) updates.flyer_quote = body.flyer_quote;
 
     // Artists and admins can toggle link_active (pause/resume)
     if (body.link_active !== undefined) {

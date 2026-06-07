@@ -18,6 +18,7 @@ export interface Database {
           link_inactive_reason: string | null;
           account_active: boolean;
           account_inactive_reason: string | null;
+          flyer_quote: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -29,6 +30,7 @@ export interface Database {
           link_inactive_reason?: string | null;
           account_active?: boolean;
           account_inactive_reason?: string | null;
+          flyer_quote?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -40,6 +42,7 @@ export interface Database {
           link_inactive_reason?: string | null;
           account_active?: boolean;
           account_inactive_reason?: string | null;
+          flyer_quote?: string | null;
           created_at?: string;
           updated_at?: string;
         };

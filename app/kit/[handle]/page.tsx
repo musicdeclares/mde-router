@@ -307,10 +307,10 @@ export default async function KitPage({
           <ul className="grid gap-3 sm:grid-cols-3 print:gap-1.5 print:grid-cols-3">
             {[
               {
-                title: "MDE Logo",
-                description: "Official Music Declares Emergency logo for promotional materials.",
-                href: "https://ia601401.us.archive.org/22/items/mde-logo/1-MDE-Logo.png",
-                label: "Download",
+                title: "Printable Flyer",
+                description: "A print-ready letter/A4 flyer with your AMPLIFY QR code: perfect for merch tables, stage banners, and venues.",
+                href: `/flyer/${artist.handle}`,
+                label: "Open Flyer",
               },
               {
                 title: "Promo Video",
@@ -319,10 +319,10 @@ export default async function KitPage({
                 label: "View",
               },
               {
-                title: "Program One-Sheet",
-                description: "Overview of the AMPLIFY program — share with your team or management.",
-                href: "https://archive.org/details/amplify-program-one-sheet",
-                label: "View",
+                title: "MDE Logo",
+                description: "Official Music Declares Emergency logo for promotional materials.",
+                href: "https://ia601401.us.archive.org/22/items/mde-logo/1-MDE-Logo.png",
+                label: "Download",
               },
             ].map((item) => (
               <li
@@ -344,6 +344,18 @@ export default async function KitPage({
               </li>
             ))}
           </ul>
+          <p className="text-sm text-muted-foreground">
+            For reference:{" "}
+            <a
+              href="https://archive.org/details/amplify-program-one-sheet"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground"
+            >
+              AMPLIFY Program One-Sheet
+            </a>{" "}
+            — overview for your team or management.
+          </p>
         </section>
 
         {/* Questions */}

@@ -43,6 +43,7 @@ export default function EditArtistPage({
   const [name, setName] = useState("");
   const [accountActive, setAccountActive] = useState(true);
   const [accountInactiveReason, setAccountInactiveReason] = useState("");
+  const [flyerQuote, setFlyerQuote] = useState("");
 
   // Unsaved changes tracking
   const initialValues = useMemo(
@@ -50,12 +51,13 @@ export default function EditArtistPage({
       name: artist?.name ?? "",
       accountActive: artist?.account_active ?? true,
       accountInactiveReason: artist?.account_inactive_reason ?? "",
+      flyerQuote: artist?.flyer_quote ?? "",
     }),
     [artist],
   );
   const currentValues = useMemo(
-    () => ({ name, accountActive, accountInactiveReason }),
-    [name, accountActive, accountInactiveReason],
+    () => ({ name, accountActive, accountInactiveReason, flyerQuote }),
+    [name, accountActive, accountInactiveReason, flyerQuote],
   );
   const { hasUnsavedChanges, savedAt, markSaved } = useUnsavedChanges(
     initialValues,
@@ -82,6 +84,7 @@ export default function EditArtistPage({
       setName(data.artist.name);
       setAccountActive(data.artist.account_active ?? true);
       setAccountInactiveReason(data.artist.account_inactive_reason ?? "");
+      setFlyerQuote(data.artist.flyer_quote ?? "");
     } catch (error) {
       console.error("Error fetching artist:", error);
       toast.error("Failed to load artist");
@@ -110,6 +113,7 @@ export default function EditArtistPage({
           account_inactive_reason: accountActive
             ? null
             : accountInactiveReason.trim() || null,
+          flyer_quote: flyerQuote.trim() || null,
         }),
       });
 
@@ -313,7 +317,7 @@ export default function EditArtistPage({
             <CardHeader>
               <CardTitle className="text-base">Artist AMPLIFY Assets</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <AmplifyLinkActions
                 artistHandle={artist.handle}
                 artistName={artist.name}
@@ -323,6 +327,30 @@ export default function EditArtistPage({
                   viewKit: EVENTS.ADMIN_VIEW_KIT,
                 }}
               />
+              <div className="border-t pt-4 space-y-2">
+                <Label htmlFor="flyer-quote">Flyer Quote</Label>
+                <Textarea
+                  id="flyer-quote"
+                  value={flyerQuote}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 280) setFlyerQuote(e.target.value);
+                  }}
+                  placeholder="Artist's own words about why they support climate action — shown on their printable flyer."
+                  disabled={saving}
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {flyerQuote.length}/280 characters · Appears on the{" "}
+                  <a
+                    href={`/flyer/${artist.handle}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-foreground"
+                  >
+                    printable flyer
+                  </a>
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
