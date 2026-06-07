@@ -42,6 +42,9 @@ export const EVENTS = {
   KIT_DOWNLOAD_QR: "kit-download-qr",
   KIT_OPEN_QR_DIALOG: "kit-open-qr-dialog",
 
+  // === Flyer ===
+  FLYER_PRINT: "flyer-print",
+
   // === Artist Dashboard ===
   ARTIST_COPY_LINK: "artist-copy-link",
   ARTIST_OPEN_QR_DIALOG: "artist-open-qr-dialog",
